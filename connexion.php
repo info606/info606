@@ -36,6 +36,7 @@ else{
 				$_SESSION["prenomEnseignant"]=$ensRecup->prenomEnseignant;
 				$_SESSION["loginEnseignant"]=$ensRecup->loginEnseignant;
 				$_SESSION["numComposante"]=$ensRecup->numComposante;
+				$_SESSION["erreurs"]=array();
 
 $html = <<<HTML
 <!DOCTYPE html>

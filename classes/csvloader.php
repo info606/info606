@@ -2,7 +2,12 @@
 
 function emptyFilter($var)
 {
-        return (!empty($var));
+    return (!empty($var));
+}
+
+function emptyArrayFilter($var)
+{
+    return (count($var) != 0);
 }
 
 class CSVLoader{
@@ -69,25 +74,30 @@ class CSVLoader{
 		return $data;
 	}
 
+	/* Il y a un bug provenant de PHP (https://bugs.php.net/bug.php?id=46569) avec le seek et fgetcsv
+	*  Donc, utilisation de current() avec next().
+	*/
 	public function getData()
 	{
 		$data = array();
-		$i = 1;
 
-		while (!$this->file->eof()) {
-			$ligne = array();
-			/*$temp = $this->file->fgetcsv();
-			for($j = 0; $j < count($titles); $j++)
+		/* On saute la ligne des titres */
+		$this->file->seek(1);
+
+		while($this->file->valid())
+		{
+			$ligne = $this->file->current();
+			if($ligne)
 			{
-				$ligne[$titles[$j]] = $temp[$j];
-			}*/
-			$temp = $this->file->fgetcsv();
-			print_r($temp);
-			$temp = array_filter($temp, "emptyFilter");
-		    $data[] = $temp;
-		    $i++;
+				/* On retire les cases vides */
+				$ligne = array_filter($ligne, "emptyFilter");
+				$data[] = $ligne;
+			}
+			$this->file->next();
 		}
 
+		/* On retire les lignes vides */
+		$data = array_filter($data, "emptyArrayFilter");
 		return $data;
 	}
 }

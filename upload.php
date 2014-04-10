@@ -11,6 +11,9 @@ if(!verifConnexion("enseignant"))
 
 if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 {
+	/* On vide les erreurs */
+	$_SESSION["erreurs"] = array();
+
 	$compControleur = new ComposanteControleur();
 	$composante = $compControleur->composanteManager->recupererParNum($_SESSION["numComposante"]);
 	$dossier = "donnees/".$_POST["type"]."/";
@@ -19,16 +22,15 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 	$extension = strrchr($_FILES["fichier"]["name"],'.');
 	if($extension != ".csv")
 	{
-		$erreur = "Mauvaise extension !";
+		$_SESSION['erreurs'][] = "Mauvaise extension !";
 	}
 	if(filesize($_FILES["fichier"]["tmp_name"]) > 2000000)
 	{
-		$erreur = "Fichier trop volumineux";
+		$_SESSION['erreurs'][] = "Fichier trop volumineux";
 	}
 
-	if(!isset($erreur) && move_uploaded_file($_FILES["fichier"]["tmp_name"], $dossier.$nomFichier))
+	if((count($_SESSION['erreurs'] != 0)) && move_uploaded_file($_FILES["fichier"]["tmp_name"], $dossier.$nomFichier))
 	{
-		echo "blabla";
 		switch($_POST["type"])
 		{
 			case "resultats":
@@ -45,6 +47,8 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 	}
 	else
 	{
-		echo $erreur;
+		$_SESSION['erreurs'][] = "Impossible d'uploader le fichier.";
 	}
+
+	print_r($_SESSION['erreurs']);
 }

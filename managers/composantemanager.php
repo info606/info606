@@ -79,7 +79,7 @@ SQL
 
 		$data = $q->fetch(PDO::FETCH_ASSOC);
 		if($data['nb'] == 0)
-			throw new Exception("Il n'existe aucune composante correspondante.");
+			throw new Exception("Il n'existe aucune composante correspondante ($c->codeComposante | $c->libComposante).");
 
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT numComposante

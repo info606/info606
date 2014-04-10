@@ -17,10 +17,11 @@ class EtudiantManager
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Etudiant
-			WHERE numEtudiant=:id
+			WHERE numEtudiant=:id OR loginEtudiant=:login
 SQL
 		);
 		$q->bindValue(':id', 		$e->numEtudiant);
+		$q->bindValue(':login',		$e->loginEtudiant);
 		$q->execute();
 		$data = $q->fetch(PDO::FETCH_ASSOC);
 		if ($data['nb'] != 0)

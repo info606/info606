@@ -17,9 +17,12 @@ class ValidationManager
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Validation
-			WHERE idValidation=:id
+			WHERE idValidation=:id OR (numEtudiant=:numEt AND idEpreuve=:idEp)
 SQL
 		);
+
+		$q->bindValue(":numEt", $v->numEtudiant);
+		$q->bindValue(":idEp", $v->idEpreuve);
 		$q->bindValue(':id', 		$v->idValidation);
 		$q->execute();
 		$data = $q->fetch(PDO::FETCH_ASSOC);
@@ -37,14 +40,13 @@ SQL
 
 		$q = $this->_myPDO->prepare(<<<SQL
 			INSERT INTO validation(numEnseignant, numEtudiant, idEpreuve, dateValidation)
-			VALUES (:numEns, :numEt, :idEp, :dateVal)
+			VALUES (:numEns, :numEt, :idEp, NOW())
 SQL
 		);
 
 		$q->bindValue(":numEns", 		$v->numEnseignant);
 		$q->bindValue(":numEt", 		$v->numEtudiant);
 		$q->bindValue(":idEp", 		$v->idEpreuve);
-		$q->bindValue(":dateVal", 		$v->dateValidation);
 
 		$q->execute();
 	}
@@ -62,6 +64,41 @@ SQL
 
 		$q->bindValue(':num', $v->idValidation);
 		$q->execute();
+	}
+
+	public function recupererNum($v)
+	{
+		$q = $this->_myPDO->prepare(<<<SQL
+			SELECT count(*) AS "nb"
+			FROM Validation
+			WHERE numEtudiant=:numEt AND idEpreuve=:idEp
+SQL
+		);
+
+		$q->bindValue(":numEt", $v->numEtudiant);
+		$q->bindValue(":idEp", $v->idEpreuve);
+		$q->execute();
+
+		$data = $q->fetch(PDO::FETCH_ASSOC);
+		if($data['nb'] == 0)
+			throw new Exception("Il n'existe aucune validation avec l'&eacutetudiant $v->numEtudiant et l'&eacutepreuve $v->idEpreuve.");
+		elseif($data['nb'] > 1)
+			throw new Exception("Il existe plusieurs validations avec l'&eacutetudiant $v->numEtudiant et l'&eacutepreuve $v->idEpreuve.");
+
+		$q = $this->_myPDO->prepare(<<<SQL
+			SELECT idValidation
+			FROM Validation
+			WHERE numEtudiant=:numEt AND idEpreuve=:idEp
+SQL
+		);
+
+		$q->bindValue(":numEt", $v->numEtudiant);
+		$q->bindValue(":idEp", $v->idEpreuve);
+		$q->execute();
+
+		$res = $q->fetch(PDO::FETCH_ASSOC);
+
+		return $res["idValidation"];
 	}
 
 	public function recupererParNum($num)
@@ -183,7 +220,7 @@ SQL
 
 		$q = $this->_myPDO->prepare(<<<SQL
 			UPDATE Validation
-			SET	numEnseignant=:numEns, numEtudiant=:numEt, idEpreuve=:idEp, dateValidation=:dateVal
+			SET	numEnseignant=:numEns, numEtudiant=:numEt, idEpreuve=:idEp, dateValidation=(NOW())
 			WHERE idValidation=:idVal
 SQL
 		);
@@ -192,7 +229,6 @@ SQL
 		$q->bindValue(":numEns", 	$v->numEnseignant);
 		$q->bindValue(":numEt", 	$v->numEtudiant);
 		$q->bindValue(":idEp", 		$v->idEpreuve);
-		$q->bindValue(":dateVal", 	$v->dateValidation);
 
 		$q->execute();
 	}
