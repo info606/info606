@@ -71,19 +71,20 @@ class CSVLoader{
 
 	public function getData()
 	{
-		$titles = $this->getHeadLine();
-
 		$data = array();
 		$i = 1;
 
 		while (!$this->file->eof()) {
 			$ligne = array();
-			$temp = $this->file->fgetcsv();
+			/*$temp = $this->file->fgetcsv();
 			for($j = 0; $j < count($titles); $j++)
 			{
 				$ligne[$titles[$j]] = $temp[$j];
-			}
-		    $data[] = $ligne;
+			}*/
+			$temp = $this->file->fgetcsv();
+			print_r($temp);
+			$temp = array_filter($temp, "emptyFilter");
+		    $data[] = $temp;
 		    $i++;
 		}
 

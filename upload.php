@@ -28,16 +28,17 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 
 	if(!isset($erreur) && move_uploaded_file($_FILES["fichier"]["tmp_name"], $dossier.$nomFichier))
 	{
-			
+		echo "blabla";
 		switch($_POST["type"])
 		{
-			case "resultat":
-				/* Traitement du fichier de résultats */
+			case "resultats":
+				$resT = new ResultatTraiteur();
+				$resT->ajout($nomFichier);
 				break;
-			case "etape":
+			case "etapes":
 				/* Traitement du fichier d'étape */
 				break;
-			case "etudiant":
+			case "etudiants":
 				/* Traitement du fichier d'étudiants */
 				break;
 		}
