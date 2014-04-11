@@ -35,7 +35,8 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 		{
 			case "resultats":
 				$resT = new ResultatTraiteur();
-				$resT->ajout($nomFichier);
+				/*$resT->ajout($nomFichier);*/
+				$resT->maj();
 				break;
 			case "etapes":
 				/* Traitement du fichier d'étape */

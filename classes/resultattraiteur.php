@@ -2,6 +2,7 @@
 
 $rootPath = $_SERVER['DOCUMENT_ROOT'];
 require_once($rootPath."/info606/outils_php/autoload.php");
+require_once($rootPath."/info606/outils_php/arrayTools.php");
 
 class ResultatTraiteur extends Traiteur
 {
@@ -71,7 +72,6 @@ class ResultatTraiteur extends Traiteur
 					$index = $this->csvLoader->getIndexTitle(array($lib));
 					if(isset($ligne[$index]) && $ligne[$index] == 1)
 					{
-						var_dump($v);
 						if(!$this->validationM->exists($v))
 						{
 							$this->validationM->ajouter($v);
@@ -83,6 +83,14 @@ class ResultatTraiteur extends Traiteur
 						}
 						$v->idValidation = null;
 					}
+					else
+					{
+						if($this->validationM->exists($v))
+						{
+							$v->idValidation = $this->validationM->recupererNum($v);
+							$this->validationM->supprimer($v);
+						}
+					}
 					
 				}
 			}
@@ -91,8 +99,6 @@ class ResultatTraiteur extends Traiteur
 				$_SESSION['erreurs'][] = $e->getMessage();
 			}
 		}
-		
-
 	}
 
 	public function suppression($filename)
@@ -102,6 +108,23 @@ class ResultatTraiteur extends Traiteur
 
 	public function maj()
 	{
-		echo "Maj";
+		/* Récupérer tous les fichiers */
+		$files = scandir($this->path, SCANDIR_SORT_NONE);
+		var_dump($files);
+		foreach ($files as $key => $value) {
+			if(!is_file($this->path.$value))
+			{
+				unset($files[$key]);
+			}
+		}
+		var_dump($files);
+		/* Les trier par ordre chronologique */
+		usort($files,'arrayDateSort');
+		var_dump($files);
+		/* Les traiter un par un */
+		foreach ($files as $value) {
+			$this->ajout($value);
+		}
 	}
+
 }

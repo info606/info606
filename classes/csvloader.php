@@ -1,14 +1,7 @@
 <?php
 
-function emptyFilter($var)
-{
-    return (!empty($var));
-}
-
-function emptyArrayFilter($var)
-{
-    return (count($var) != 0);
-}
+$rootPath = $_SERVER['DOCUMENT_ROOT'];
+require_once($rootPath."/info606/outils_php/arrayTools.php");
 
 class CSVLoader{
 
