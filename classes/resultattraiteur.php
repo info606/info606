@@ -28,7 +28,7 @@ class ResultatTraiteur extends Traiteur
 		$this->epreuveM = $epreuveC->epreuveManager;
 	}
 
-	public function ajout($filename)
+	public function traiter($filename)
 	{
 		$this->csvLoader = new CSVLoader($this->path.$filename, ";");
 		$c = new Composante();
@@ -103,7 +103,14 @@ class ResultatTraiteur extends Traiteur
 
 	public function suppression($filename)
 	{
-		echo "Suppression";
+		if(!unlink($this->path.$filename))
+		{
+			$_SESSION['erreurs'][] = "Impossible de supprimer le fichier ".$this->path.$filename ;
+		}
+		else
+		{
+			$this->maj();
+		}
 	}
 
 	public function maj()
@@ -123,7 +130,7 @@ class ResultatTraiteur extends Traiteur
 		var_dump($files);
 		/* Les traiter un par un */
 		foreach ($files as $value) {
-			$this->ajout($value);
+			$this->traiter($value);
 		}
 	}
 
