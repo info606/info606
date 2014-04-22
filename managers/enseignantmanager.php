@@ -103,7 +103,7 @@ SQL
 		$e->prenomEnseignant = $res['PRENOMENSEIGNANT'];
 		$e->loginEnseignant = $res['LOGINENSEIGNANT'];
 		$e->mdpEnseignant = $res['MDPENSEIGNANT'];
-		$e->admin = $res['ADMIN']
+		$e->admin = $res['ADMIN'];
 		$e->numComposante = $res['NUMCOMPOSANTE'];
 
 		return $e;
