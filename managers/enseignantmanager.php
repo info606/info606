@@ -36,8 +36,8 @@ SQL
 			throw new Exception("Impossible d'ajouter l'enseignant car le numéro ".$e->numEnseignant." est déjà utilisé.");
 
 		$q = $this->_myPDO->prepare(<<<SQL
-			INSERT INTO enseignant(numenseignant, nomenseignant, prenomEnseignant, loginEnseignant, mdpenseignant, numComposante)
-			VALUES (:num, :nom, :prenom, :login, :mdp, :numComposante)
+			INSERT INTO enseignant(numenseignant, nomenseignant, prenomEnseignant, loginEnseignant, mdpenseignant, numComposante, admin)
+			VALUES (:num, :nom, :prenom, :login, :mdp, :numComposante, :admin)
 SQL
 		);
 
@@ -47,6 +47,7 @@ SQL
 		$q->bindValue(":login", 		$e->loginEnseignant);
 		$q->bindValue(":mdp", 		$e->mdpEnseignant);
 		$q->bindValue(":numComposante", $e->numComposante);
+		$q->bindValue(":admin", $e->admin);
 		$q->execute();
 	}
 
@@ -102,6 +103,7 @@ SQL
 		$e->prenomEnseignant = $res['PRENOMENSEIGNANT'];
 		$e->loginEnseignant = $res['LOGINENSEIGNANT'];
 		$e->mdpEnseignant = $res['MDPENSEIGNANT'];
+		$e->admin = $res['ADMIN']
 		$e->numComposante = $res['NUMCOMPOSANTE'];
 
 		return $e;
@@ -145,6 +147,7 @@ SQL
 		$e->loginEnseignant = $res['LOGINENSEIGNANT'];
 		$e->mdpEnseignant = $res['MDPENSEIGNANT'];
 		$e->numComposante = $res['NUMCOMPOSANTE'];
+		$e->admin = $res['ADMIN'];
 
 		return $e;
 	}
@@ -169,6 +172,7 @@ SQL
 			$e->loginEnseignant = $res['LOGINENSEIGNANT'];
 			$e->mdpEnseignant = $res['MDPENSEIGNANT'];
 			$e->numComposante = $res['NUMCOMPOSANTE'];
+			$e->admin = $res['ADMIN'];
 
 			$tabEnseignant[] = $e; 
 		}
@@ -188,7 +192,8 @@ SQL
 				prenomEnseignant=:prenom,
 				loginEnseignant=:login, 
 				mdpEnseignant=:mdp,
-				numComposante=:numComposante
+				numComposante=:numComposante,
+				admin=:admin
 			WHERE numEnseignant=:num
 SQL
 		);
@@ -199,6 +204,7 @@ SQL
 		$q->bindValue(":mdp", 		$e->mdpEnseignant);
 		$q->bindValue(":num",		$e->numEnseignant);
 		$q->bindValue(":numComposante", $e->numComposante);
+		$q->bindValue(":admin", $e->admin);
 		$q->execute();
 	}
 

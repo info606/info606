@@ -12,20 +12,23 @@ class Enseignant
 	private $loginEnseignant;
 	private $mdpEnseignant;
     private $numComposante;
+    private $admin;
 
 	public function __construct($num="",
                                 $nom="",
 								$prenom="", 
 								$login="", 
 								$mdp="",
-                                $numComposante="")
+                                $numComposante="",
+                                $admin=false)
 	{
         $this->numEnseignant = $num;
 		$this->nomEnseignant = $nom;
 		$this->prenomEnseignant = $prenom;		
 		$this->loginEnseignant = $login;
 		$this->mdpEnseignant = $mdp;
-        $this->numComposante = $numComposante;		
+        $this->numComposante = $numComposante;
+        $this->admin = $admin;	
 	}
 
 	 public function __get($attribut)

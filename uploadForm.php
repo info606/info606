@@ -42,7 +42,6 @@ $formu = <<<HTML
 						<fieldset>
 							<legend>Source des données</legend>
 							<input type="radio" id="res" name="type" value="resultats"/><label for="res">Résultats</label>
-							<input type="radio" id="etape" name="type" value="etapes"/><label for="etape">Etapes</label>
 							<input type="radio" id="etud" name="type" value="etudiants"/><label for="etud">Etudiants</label>
 						</fieldset>
 						<input type="submit" value="envoyer"/>
