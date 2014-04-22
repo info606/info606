@@ -4,19 +4,19 @@ $rootPath = $_SERVER['DOCUMENT_ROOT'];
 require_once($rootPath."/info606/outils_php/autoload.php");
 require_once($rootPath."/info606/outils_php/arrayTools.php");
 
-class ResultatTraiteur extends Traiteur
+class InscriptionTraiteur extends Traiteur
 {
 	private $composanteM;
 	private $etudiantM;
 	private $validationM;
 	private $epreuveM;
 	private $epreuvesLib = array("D1P", "D1T", "D2P", "D2T", "D3P", "D3T", "D4P", "D4T", "D5P", "D5T",);
-	private $titres = array("Composante (code)","Code Etudiant","Etape (code)");
+	private $titres = array("Année de l'inscription","Code Etudiant","Nom", "prénom", "date de naissance","Composante (code)", "composante (lib.)", "Etape (code)", "etape (lib.)", "IAE (date)");
 	
 	public function __construct()
 	{
 		$this->csvLoader = null;
-		$this->path = $_SERVER['DOCUMENT_ROOT']."/info606/donnees/resultats/";
+		$this->path = $_SERVER['DOCUMENT_ROOT']."/info606/donnees/etudiants/";
 
 		$composanteC = new ComposanteControleur();
 		$etudiantC = new EtudiantControleur();
@@ -33,7 +33,7 @@ class ResultatTraiteur extends Traiteur
 	{
 		echo "bonjour";
 		try{
-			$this->csvLoader = new CSVLoader($this->path.$filename, array_merge($this->titres,$this->epreuvesLib), ";");
+			$this->csvLoader = new CSVLoader($this->path.$filename, $this->titres, ";");
 		}
 		catch(Expression $e)
 		{
@@ -47,61 +47,14 @@ class ResultatTraiteur extends Traiteur
 
 		$data = $this->csvLoader->getData();
 		foreach ($data as $ligne) {
-			/* Récupération du numéro de la composante */
-			$index = $this->csvLoader->getIndexTitle(array("composante", "code"));
-			$c->libComposante = $ligne[$index];
-			try{
-				$numComp = $this->composanteM->recupererNum($c);	
-			}
-			catch(Expression $e)
-			{
-				$_SESSION['erreurs'][] = $e->getMessage();
-				continue;
-			}
-
-			$index = $this->csvLoader->getIndexTitle(array("Code", "Etudiant"));
-			/* On verifie si le numéro d'étudiant existe */
-			try{
-				$et = $this->etudiantM->recupererParNum($ligne[$index]);
-			}
-			catch(Expression $e)
-			{
-				$_SESSION['erreurs'][] = $e->getMessage();
-				continue;
-			}
-
-			$v->numEnseignant = $_SESSION["numEnseignant"];
-			$v->numEtudiant = $et->numEtudiant;
-			
-			/* Insertion des épreuves (si elles n'existent pas déjà) */
-			foreach ($this->epreuvesLib as $lib) {
-				$e = new Epreuve();
-				$e->numComposante = $numComp;
-				$e->libEpreuve = $lib;
-
-				$v->idEpreuve = $this->epreuveM->recupererNum($e);
-				
-				/* On récupère le résultat de l'étudiant dans cette épreuve */
-				$index = $this->csvLoader->getIndexTitle(array($lib));
-				if(isset($ligne[$index]))
-				{
-					$v->valeurValidation = $ligne[$index];
-					try{
-						$this->majValidation($v, $_SESSION['admin']);
-					}
-					catch(Exception $e)
-					{
-						$_SESSION['erreurs'][] = $e->getMessage();
-					}
-
-					$v->idValidation = null;
-				}
-				else
-				{
-					$_SESSION['erreurs'][] = "Résultat pour l'épreuve $lib de l'étudiant $numEtudiant manquant.";
-					continue 2;
-				}
-			}
+			/* Récupérer Composante */
+			/* Insérer Composante */
+			/* Insérer Epreuve pour la composante */
+			/* Récupérer Etape */
+			/* Insérer Etape */
+			/* Récupérer Etudiant */
+			/* Insérer Etudiant */
+			/* Insérer Validation à -1 pour l'étudiant et pour chaque épreuve de la composante */
 		}
 	}
 
