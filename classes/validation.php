@@ -11,13 +11,15 @@ class Validation
     private $numEtudiant; /* Clé étrangère */
     private $idEpreuve; /* Clé étrangère */
     private $dateValidation;
+    private $valeurValidation;
 
-	public function __construct($date="", $numEnseignant="", $numEtudiant="", $idEpreuve="")
+	public function __construct($date="", $numEnseignant="", $numEtudiant="", $idEpreuve="", $valeur = -1)
 	{
         $this->numEnseignant = $numEnseignant; /* Clé étrangère */
         $this->numEtudiant = $numEtudiant; /* Clé étrangère */
         $this->idEpreuve = $idEpreuve; /* Clé étrangère */
         $this->dateValidation = $date;
+        $this->valeurValidation = $valeur;
 	}
 
     public function __get($attribut)

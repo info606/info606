@@ -29,7 +29,7 @@ class Etudiant
 								$mdp="",
 								$dateIAEE="",
 								$dateIAC2I="",
-                                $C2IValide=0;
+                                $C2IValide=0,
 								$numRegime="",
 								$idEtape="")
 	{

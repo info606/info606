@@ -39,14 +39,15 @@ SQL
 			throw new Exception("Impossible d'ajouter la validation car le numéro ".$v->idValidation." est déjà utilisé.");
 
 		$q = $this->_myPDO->prepare(<<<SQL
-			INSERT INTO validation(numEnseignant, numEtudiant, idEpreuve, dateValidation)
-			VALUES (:numEns, :numEt, :idEp, NOW())
+			INSERT INTO validation(numEnseignant, numEtudiant, idEpreuve, dateValidation, valeurValidation)
+			VALUES (:numEns, :numEt, :idEp, NOW(), :valeurValidation)
 SQL
 		);
 
 		$q->bindValue(":numEns", 		$v->numEnseignant);
 		$q->bindValue(":numEt", 		$v->numEtudiant);
 		$q->bindValue(":idEp", 		$v->idEpreuve);
+		$q->bindValue(":valeurValidation", $v->valeurValidation);
 
 		$q->execute();
 	}
@@ -138,6 +139,7 @@ SQL
 		$v->numEtudiant = $res['NUMETUDIANT'];
 		$v->idEpreuve = $res['IDEPREUVE'];
 		$v->dateValidation = $res['DATEVALIDATION'];
+		$v->valeurValidation = $res['VALEURVALIDATION'];
 
 		return $v;
 	}
@@ -178,6 +180,7 @@ SQL
 			$v->numEtudiant = $res['NUMETUDIANT'];
 			$v->idEpreuve = $res['IDEPREUVE'];
 			$v->dateValidation = $res['DATEVALIDATION'];
+			$v->valeurValidation = $res['VALEURVALIDATION'];
 
 			$tab[] = $v;
 		}
@@ -205,6 +208,7 @@ SQL
 			$v->numEtudiant = $res['NUMETUDIANT'];
 			$v->idEpreuve = $res['IDEPREUVE'];
 			$v->dateValidation = $res['DATEVALIDATION'];
+			$v->valeurValidation = $res['VALEURVALIDATION'];
 
 			$tabValidations[] = $v; 
 		}
@@ -220,7 +224,7 @@ SQL
 
 		$q = $this->_myPDO->prepare(<<<SQL
 			UPDATE Validation
-			SET	numEnseignant=:numEns, numEtudiant=:numEt, idEpreuve=:idEp, dateValidation=(NOW())
+			SET	numEnseignant=:numEns, numEtudiant=:numEt, idEpreuve=:idEp, dateValidation=(NOW(), valeurValidation=:valeurValidation)
 			WHERE idValidation=:idVal
 SQL
 		);
@@ -229,6 +233,7 @@ SQL
 		$q->bindValue(":numEns", 	$v->numEnseignant);
 		$q->bindValue(":numEt", 	$v->numEtudiant);
 		$q->bindValue(":idEp", 		$v->idEpreuve);
+		$q->bindValue(":valeurValidation", $v->valeurValidation);
 
 		$q->execute();
 	}
