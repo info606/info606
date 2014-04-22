@@ -36,6 +36,7 @@ else{
 				$_SESSION["prenomEnseignant"]=$ensRecup->prenomEnseignant;
 				$_SESSION["loginEnseignant"]=$ensRecup->loginEnseignant;
 				$_SESSION["numComposante"]=$ensRecup->numComposante;
+				$_SESSION["admin"] = ($ensRecup->admin==1)?true:false;
 				$_SESSION["erreurs"]=array();
 
 $html = <<<HTML
@@ -91,6 +92,7 @@ HTML;
 				$_SESSION["dateIAC2IEtudiant"]=$etudiantRecup->dateIAC2IEtudiant;
 				$_SESSION["numRegime"]=$etudiantRecup->numRegime;
 				$_SESSION["idEtape"]=$etudiantRecup->idEtape;
+				$_SESSION["C2IValide"]=$etudiantRecup->C2IValide;
 
 $html = <<<HTML
 <!DOCTYPE html>

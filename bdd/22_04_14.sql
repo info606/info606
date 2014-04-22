@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Mar 22 Avril 2014 à 11:25
+-- Généré le: Mar 22 Avril 2014 à 14:48
 -- Version du serveur: 5.6.12-log
 -- Version de PHP: 5.4.12
 
@@ -126,6 +126,7 @@ CREATE TABLE IF NOT EXISTS `enseignant` (
   `LOGINENSEIGNANT` varchar(100) NOT NULL,
   `MDPENSEIGNANT` varchar(100) NOT NULL,
   `NUMCOMPOSANTE` int(11) NOT NULL,
+  `ADMIN` int(11) NOT NULL DEFAULT '0' COMMENT '0 => false, 1 => true',
   PRIMARY KEY (`NUMENSEIGNANT`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
@@ -133,8 +134,8 @@ CREATE TABLE IF NOT EXISTS `enseignant` (
 -- Contenu de la table `enseignant`
 --
 
-INSERT INTO `enseignant` (`NUMENSEIGNANT`, `NOMENSEIGNANT`, `PRENOMENSEIGNANT`, `LOGINENSEIGNANT`, `MDPENSEIGNANT`, `NUMCOMPOSANTE`) VALUES
-(1, 'POLO', 'Michel', 'michel', 'azerty', 728);
+INSERT INTO `enseignant` (`NUMENSEIGNANT`, `NOMENSEIGNANT`, `PRENOMENSEIGNANT`, `LOGINENSEIGNANT`, `MDPENSEIGNANT`, `NUMCOMPOSANTE`, `ADMIN`) VALUES
+(1, 'POLO', 'Michel', 'michel', 'azerty', 728, 1);
 
 -- --------------------------------------------------------
 
@@ -911,6 +912,7 @@ CREATE TABLE IF NOT EXISTS `etudiant` (
   `MDPETUDIANT` varchar(100) NOT NULL,
   `DATEIAEETUDIANT` date NOT NULL,
   `DATEIAC2IETUDIANT` date DEFAULT NULL,
+  `C2IVALIDE` int(11) NOT NULL DEFAULT '0' COMMENT '0 => false, 1 => true',
   PRIMARY KEY (`NUMETUDIANT`),
   KEY `FK_APPARTENIR` (`NUMREGIME`),
   KEY `FK_APPARTENIR_2` (`IDETAPE`)
@@ -920,9 +922,9 @@ CREATE TABLE IF NOT EXISTS `etudiant` (
 -- Contenu de la table `etudiant`
 --
 
-INSERT INTO `etudiant` (`NUMETUDIANT`, `NUMREGIME`, `IDETAPE`, `NOMETUDIANT`, `PRENOMETUDIANT`, `MAILETUDIANT`, `DATENAISETUDIANT`, `LOGINETUDIANT`, `MDPETUDIANT`, `DATEIAEETUDIANT`, `DATEIAC2IETUDIANT`) VALUES
-('1234', 1, 1, 'PIERRON', 'Guillaume', 'bwbdfx@sdfvd.fr', '1993-06-01', 'pierr025', 'azerty', '2014-04-01', '2014-04-02'),
-('1235', 1, 2, 'COUTURIER', 'Valentin', 'sdvsdv@dsdf.fr', '1992-04-04', 'coutu003', 'azerty', '2014-04-03', '2014-04-05');
+INSERT INTO `etudiant` (`NUMETUDIANT`, `NUMREGIME`, `IDETAPE`, `NOMETUDIANT`, `PRENOMETUDIANT`, `MAILETUDIANT`, `DATENAISETUDIANT`, `LOGINETUDIANT`, `MDPETUDIANT`, `DATEIAEETUDIANT`, `DATEIAC2IETUDIANT`, `C2IVALIDE`) VALUES
+('1234', 1, 1, 'PIERRON', 'Guillaume', 'bwbdfx@sdfvd.fr', '1993-06-01', 'pierr025', 'azerty', '2014-04-01', '2014-04-02', 0),
+('1235', 1, 2, 'COUTURIER', 'Valentin', 'sdvsdv@dsdf.fr', '1992-04-04', 'coutu003', 'azerty', '2014-04-03', '2014-04-05', 0);
 
 -- --------------------------------------------------------
 

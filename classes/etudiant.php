@@ -15,6 +15,7 @@ class Etudiant
 	private $mdpEtudiant;
 	private $dateIAEEtudiant;
 	private $dateIAC2IEtudiant;
+    private $C2IValide;
 	private $numRegime; /* Clé étrangère */
 	private $idEtape; /* Clé étrangère */
 
@@ -28,6 +29,7 @@ class Etudiant
 								$mdp="",
 								$dateIAEE="",
 								$dateIAC2I="",
+                                $C2IValide=0;
 								$numRegime="",
 								$idEtape="")
 	{
@@ -40,6 +42,7 @@ class Etudiant
 		$this->mdpEtudiant = $mdp;
 		$this->dateIAEEtudiant = $dateIAEE;
 		$this->dateIAC2IEtudiant = $dateIAC2I;
+        $this->C2IValide = $C2IValide;
 		$this->numRegime = $numRegime;
 		$this->idEtape = $idEtape;
 	}

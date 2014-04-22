@@ -56,8 +56,8 @@ SQL
 			throw new Exception("Impossible d'ajouter l'étudiant car le numéro ".$e->numEtudiant." est déjà utilisé.");
 
 		$q = $this->_myPDO->prepare(<<<SQL
-			INSERT INTO etudiant(numEtudiant, numRegime, idEtape, nomEtudiant, prenomEtudiant, mailEtudiant, dateNaisEtudiant, loginEtudiant, mdpEtudiant, dateIAEEtudiant, dateIAC2IEtudiant)
-			VALUES (:num, :numR, :id, :nom, :prenom, :mail, :dateNais, :login, :mdp, :dateIAE, :dateIAC2I)
+			INSERT INTO etudiant(numEtudiant, numRegime, idEtape, nomEtudiant, prenomEtudiant, mailEtudiant, dateNaisEtudiant, loginEtudiant, mdpEtudiant, dateIAEEtudiant, dateIAC2IEtudiant, C2IValide)
+			VALUES (:num, :numR, :id, :nom, :prenom, :mail, :dateNais, :login, :mdp, :dateIAE, :dateIAC2I, :C2IValide)
 SQL
 		);
 
@@ -72,6 +72,7 @@ SQL
 		$q->bindValue(":mdp", 		$e->mdpEtudiant);
 		$q->bindValue(":dateIAE", 		$e->dateIAEEtudiant);
 		$q->bindValue(":dateIAC2I", 		$e->dateIAC2IEtudiant);
+		$q->bindValue(":C2IValide", 	$e->C2IValide);
 		$q->execute();
 	}
 
@@ -134,6 +135,7 @@ SQL
 		$e->dateIAC2IEtudiant = $res['DATEIAC2IETUDIANT'];
 		$e->numRegime = $res['NUMREGIME'];
 		$e->idEtape = $res['IDETAPE'];
+		$e->C2IValide = $res['C2IValide'];
 
 		return $e;
 	}
@@ -181,6 +183,7 @@ SQL
 		$e->dateIAC2IEtudiant = $res['DATEIAC2IETUDIANT'];
 		$e->numRegime = $res['NUMREGIME'];
 		$e->idEtape = $res['IDETAPE'];
+		$e->C2IValide = $res['C2IValide'];
 
 		return $e;
 	}
@@ -210,6 +213,7 @@ SQL
 			$e->dateIAC2IEtudiant = $res['DATEIAC2IETUDIANT'];
 			$e->numRegime = $res['NUMREGIME'];
 			$e->idEtape = $res['IDETAPE'];
+			$e->C2IValide = $res['C2IValide'];
 
 			$tabEtudiant[] = $e; 
 		}
@@ -235,7 +239,8 @@ SQL
 				loginEtudiant=:login, 
 				mdpEtudiant=:mdp, 
 				dateIAEEtudiant=:dateIAE, 
-				dateIAC2IEtudiant=:dateIAC2I
+				dateIAC2IEtudiant=:dateIAC2I,
+				C2IValide=:C2IValide
 			WHERE numEtudiant=:num
 SQL
 		);
@@ -251,6 +256,7 @@ SQL
 		$q->bindValue(":mdp", 		$e->mdpEtudiant);
 		$q->bindValue(":dateIAE", 		$e->dateIAEEtudiant);
 		$q->bindValue(":dateIAC2I", 		$e->dateIAC2IEtudiant);
+		$q->bindValue(":C2IValide",	$e->C2IValide);
 		$q->execute();
 	}
 
