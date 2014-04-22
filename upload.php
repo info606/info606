@@ -35,6 +35,7 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 		{
 			case "resultats":
 				$resT = new ResultatTraiteur();
+				echo "upload appel<br>";
 				$resT->traiter($nomFichier);
 				// $resT->maj(); // Test de la mise à jour
 				break;
@@ -53,4 +54,8 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 
 	echo "bonjour";
 	var_dump($_SESSION['erreurs']);
+}
+else
+{
+	echo "Haha";
 }

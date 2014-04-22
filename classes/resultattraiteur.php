@@ -31,10 +31,11 @@ class ResultatTraiteur extends Traiteur
 
 	public function traiter($filename, $definitif=false)
 	{
+		echo "bonjour";
 		try{
 			$this->csvLoader = new CSVLoader($this->path.$filename, array_merge($this->titres,$this->epreuvesLib), ";");
 		}
-		catch
+		catch(Expression $e)
 		{
 			$_SESSION['erreurs'][] = $e->getMessage();
 			exit();
@@ -52,7 +53,7 @@ class ResultatTraiteur extends Traiteur
 			try{
 				$numComp = $this->composanteM->recupererNum($c);	
 			}
-			catch
+			catch(Expression $e)
 			{
 				$_SESSION['erreurs'][] = $e->getMessage();
 				continue;
@@ -63,7 +64,7 @@ class ResultatTraiteur extends Traiteur
 			try{
 				$et = $this->etudiantM->recupererParNum($ligne[$index]);
 			}
-			catch
+			catch(Expression $e)
 			{
 				$_SESSION['erreurs'][] = $e->getMessage();
 				continue;
@@ -78,42 +79,53 @@ class ResultatTraiteur extends Traiteur
 				$e->numComposante = $numComp;
 				$e->libEpreuve = $lib;
 
-				if(!$this->epreuveM->exists($e))
-				{
-					$this->epreuveM->ajouter($e);	
-				}
-				else
-				{
-					$e->idEpreuve = $this->epreuveM->recupererNum($e);
-					$this->epreuveM->maj($e);
-				}
-
 				$v->idEpreuve = $this->epreuveM->recupererNum($e);
 				
 				/* On récupère le résultat de l'étudiant dans cette épreuve */
 				$index = $this->csvLoader->getIndexTitle(array($lib));
-				if(isset($ligne[$index]) && $ligne[$index] == 1)
+				if(isset($ligne[$index]))
 				{
-					if(!$this->validationM->exists($v))
-					{
-						$this->validationM->ajouter($v);
+					$v->valeurValidation = $ligne[$index];
+					try{
+						$this->majValidation($v, $_SESSION['admin']);
 					}
-					else
+					catch(Exception $e)
 					{
-						$v->idValidation = $this->validationM->recupererNum($v);
-						$this->validationM->maj($v);
+						$_SESSION['erreurs'][] = $e->getMessage();
 					}
+
 					$v->idValidation = null;
 				}
 				else
 				{
-					if($this->validationM->exists($v))
-					{
-						$v->idValidation = $this->validationM->recupererNum($v);
-						$this->validationM->supprimer($v);
-					}
+					$_SESSION['erreurs'][] = "Résultat pour l'épreuve $lib de l'étudiant $numEtudiant manquant.";
 				}
 			}
+		}
+	}
+
+	private function majValidation($validation, $admin)
+	{
+		if($this->validationM->exists($v))
+		{
+			$idValid = $this->validationM->recupererNum($v);
+			/* On récupère l'ancienne valeur de la validation */
+			$vRecup = $this->validationM->recupererParNum($idValid);
+
+			/* Cas où la valeur rétrograderait */
+			if($vRecup->valeurValidation > $validation->valeurValidation && !$admin)
+			{
+				throw new Exception("Vous n'avez pas les droits nécessaires pour rétrograder une validation");
+			}
+			else
+			{
+				$v->idValidation = $idValid;
+				$this->validationM->maj($v);
+			}
+		}
+		else
+		{
+			$this->validationM->ajouter($v);
 		}
 	}
 
