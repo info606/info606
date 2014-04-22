@@ -44,7 +44,18 @@ $formu = <<<HTML
 							<input type="radio" id="res" name="type" value="resultats"/><label for="res">Résultats</label>
 							<input type="radio" id="etud" name="type" value="etudiants"/><label for="etud">Etudiants</label>
 						</fieldset>
-						<input type="submit" value="envoyer"/>
+HTML;
+if($_SESSION["admin"])
+{
+	$formu .= <<<HTML
+		<input type="checkbox" id="definitif" name="definitif"/><label for="definitif">Import définitif</label><br>
+HTML;
+}
+$formu .= <<<HTML
+						<fieldset>
+							<legend>Validation</legend>
+								<input type="submit" value="envoyer"/>
+						<fieldset>
 					</form>
 				</div>
 			</div>

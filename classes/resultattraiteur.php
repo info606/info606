@@ -11,6 +11,7 @@ class ResultatTraiteur extends Traiteur
 	private $validationM;
 	private $epreuveM;
 	private $epreuvesLib = array("D1P", "D1T", "D2P", "D2T", "D3P", "D3T", "D4P", "D4T", "D5P", "D5T",);
+	private $titres = array("Composante (code)","Code Etudiant","Etape (code)");
 	
 	public function __construct()
 	{
@@ -28,9 +29,17 @@ class ResultatTraiteur extends Traiteur
 		$this->epreuveM = $epreuveC->epreuveManager;
 	}
 
-	public function traiter($filename)
+	public function traiter($filename, $definitif=false)
 	{
-		$this->csvLoader = new CSVLoader($this->path.$filename, ";");
+		try{
+			$this->csvLoader = new CSVLoader($this->path.$filename, array_merge($this->titres,$this->epreuvesLib), ";");
+		}
+		catch
+		{
+			$_SESSION['erreurs'][] = $e->getMessage();
+			exit();
+		}
+
 		$c = new Composante();
 		$v = new Validation();
 		$et = new Etudiant();
@@ -38,65 +47,72 @@ class ResultatTraiteur extends Traiteur
 		$data = $this->csvLoader->getData();
 		foreach ($data as $ligne) {
 			/* Récupération du numéro de la composante */
-			$index = $this->csvLoader->getIndexTitle(array("composante"));
+			$index = $this->csvLoader->getIndexTitle(array("composante", "code"));
 			$c->libComposante = $ligne[$index];
 			try{
-				$numComp = $this->composanteM->recupererNum($c);
-
-				$index = $this->csvLoader->getIndexTitle(array("Num"));
-				/* On verrifie si le numéro d'étudiant est valide */
-				$et = $this->etudiantM->recupererParNum($ligne[$index]);
-
-				$v->numEnseignant = $_SESSION["numEnseignant"];
-				$v->numEtudiant = $et->numEtudiant;
-				
-				/* Insertion des épreuves (si elles n'existent pas déjà) */
-				foreach ($this->epreuvesLib as $lib) {
-					$e = new Epreuve();
-					$e->numComposante = $numComp;
-					$e->libEpreuve = $lib;
-
-					if(!$this->epreuveM->exists($e))
-					{
-						$this->epreuveM->ajouter($e);	
-					}
-					else
-					{
-						$e->idEpreuve = $this->epreuveM->recupererNum($e);
-						$this->epreuveM->maj($e);
-					}
-
-					$v->idEpreuve = $this->epreuveM->recupererNum($e);
-					
-					/* On récupère le résultat de l'étudiant dans cette épreuve */
-					$index = $this->csvLoader->getIndexTitle(array($lib));
-					if(isset($ligne[$index]) && $ligne[$index] == 1)
-					{
-						if(!$this->validationM->exists($v))
-						{
-							$this->validationM->ajouter($v);
-						}
-						else
-						{
-							$v->idValidation = $this->validationM->recupererNum($v);
-							$this->validationM->maj($v);
-						}
-						$v->idValidation = null;
-					}
-					else
-					{
-						if($this->validationM->exists($v))
-						{
-							$v->idValidation = $this->validationM->recupererNum($v);
-							$this->validationM->supprimer($v);
-						}
-					}
-					
-				}
+				$numComp = $this->composanteM->recupererNum($c);	
 			}
-			catch(Exception $e)
+			catch
 			{
 				$_SESSION['erreurs'][] = $e->getMessage();
+				continue;
+			}
+
+			$index = $this->csvLoader->getIndexTitle(array("Code", "Etudiant"));
+			/* On verifie si le numéro d'étudiant existe */
+			try{
+				$et = $this->etudiantM->recupererParNum($ligne[$index]);
+			}
+			catch
+			{
+				$_SESSION['erreurs'][] = $e->getMessage();
+				continue;
+			}
+
+			$v->numEnseignant = $_SESSION["numEnseignant"];
+			$v->numEtudiant = $et->numEtudiant;
+			
+			/* Insertion des épreuves (si elles n'existent pas déjà) */
+			foreach ($this->epreuvesLib as $lib) {
+				$e = new Epreuve();
+				$e->numComposante = $numComp;
+				$e->libEpreuve = $lib;
+
+				if(!$this->epreuveM->exists($e))
+				{
+					$this->epreuveM->ajouter($e);	
+				}
+				else
+				{
+					$e->idEpreuve = $this->epreuveM->recupererNum($e);
+					$this->epreuveM->maj($e);
+				}
+
+				$v->idEpreuve = $this->epreuveM->recupererNum($e);
+				
+				/* On récupère le résultat de l'étudiant dans cette épreuve */
+				$index = $this->csvLoader->getIndexTitle(array($lib));
+				if(isset($ligne[$index]) && $ligne[$index] == 1)
+				{
+					if(!$this->validationM->exists($v))
+					{
+						$this->validationM->ajouter($v);
+					}
+					else
+					{
+						$v->idValidation = $this->validationM->recupererNum($v);
+						$this->validationM->maj($v);
+					}
+					$v->idValidation = null;
+				}
+				else
+				{
+					if($this->validationM->exists($v))
+					{
+						$v->idValidation = $this->validationM->recupererNum($v);
+						$this->validationM->supprimer($v);
+					}
+				}
 			}
 		}
 	}

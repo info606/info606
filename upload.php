@@ -35,7 +35,7 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 		{
 			case "resultats":
 				$resT = new ResultatTraiteur();
-				/*$resT->traiter($nomFichier);*/
+				$resT->traiter($nomFichier);
 				// $resT->maj(); // Test de la mise à jour
 				break;
 			case "etapes":
@@ -51,5 +51,6 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 		$_SESSION['erreurs'][] = "Impossible d'uploader le fichier.";
 	}
 
-	print_r($_SESSION['erreurs']);
+	echo "bonjour";
+	var_dump($_SESSION['erreurs']);
 }
