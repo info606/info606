@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;7;9;11;13;15;8;10;12;14;16;;7;9;11;13;15;8;10;12;14;16;;;7;9;11;13;15;8;10;12;14;16;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;COMPOSANTE;;ETUDIANT;;;;;INSCRIPTION DIPLÔME PRINCIPAL;;;;REGIME D'INSCRIPTION / STATUT ETUDIANT;;;;;;;;;2013-2014 (saisies);;;;;;;;;;résultat ! (calculé);;;;;;seuil :;7;;;;;validations (2011-2012 + 2012-2013);;;;;;;;;;;;
+#;"Compo
+(code)";Composante (lib.);Individu - Code Etudiant;Individu - Nom;Individu - Prénom;login;mail;IAE - Etape (code);IAE - Etape (lib.);Date création IAE (date);Date IA C2i-1;Régime (code);Régime (lib.);Statut (code);Statut (lib.);remarques;;D1P;D2P;D3P;D4P;D5P;D1T;D2T;D3T;D4T;D5T;;D1P;D2P;D3P;D4P;D5P;D1T;D2T;D3T;D4T;D5T;RESULTAT;;D1P;D2P;D3P;D4P;D5P;D1T;D2T;D3T;D4T;D5T;;;;;
+;930;SC. ECO;21304290;A1;B1;xx;mail1@etudiant.univ-reims.fr;3LD301;L1 ECONOMIE GESTION;09/07/2013;;;;;;;#REF!;-1;-1;-1;-1;-1;-1;-1;-1;-1;-1;;DEF;DEF;DEF;DEF;DEF;DEF;DEF;DEF;DEF;DEF;DEF;;;;;;;;;;;;;;;;
+;915;LETTRES;21118818;A2;B2;xx;mail2@etudiant.univ-reims.fr;3LA325;L3 ANGLAIS-ESPAGNOL;30/08/2013;;;;;;;#REF!;-1;0;0;1;1;-1;-1;-1;-1;-1;;ADM;AJ;ADM;ADM;ADM;ADM;ADM;ADM;ADM;ADM;ADM;;2011;;2011;;2011;2011;2011;2011;2011;2011;;;;;
+2344;915;LETTRES;21118433;A3;B3;xx;mail3@etudiant.univ-reims.fr;3LH201;L1 HISTOIRE;17/09/2013;19/11/2013;1;initiale;01;Etudiant;;#REF!;0;-1;0;-1;0;-1;-1;-1;-1;-1;;AJ;DEF;AJ;DEF;ADM;DEF;DEF;DEF;DEF;ADM;DEF;;;;;;2011;;;;;2011;;;;;
+2401;915;LETTRES;21308077;A4;B4;xx;mail4@etudiant.univ-reims.fr;3LH301;L1 PSYCHOLOGIE;14/07/2013;06/11/2013;1;initiale;01;Etudiant;;#REF!;-1;0;-1;0;1;1;0;1;1;1;;DEF;AJ;DEF;AJ;ADM;ADM;AJ;ADM;ADM;ADM;DEF;;;;;;;;;;;;;;;;
+;930;SC. ECO;21213527;A5;B5;xx;mail5@etudiant.univ-reims.fr;3LD303;L2 ECONOMIE GESTION;11/07/2013;;;;;;;#REF!;1;-1;1;1;1;1;1;1;0;1;;ADM;ADM;ADM;ADM;ADM;ADM;ADM;ADM;ADM;ADM;ADM;;2012;2012;;;2012;2012;2012;;2012;;;;;;
+;930;SC. ECO;21315327;A6;B6;xx;mail6@etudiant.univ-reims.fr;3LD301;L1 ECONOMIE GESTION;03/09/2013;;;;;;;#REF!;-1;0;0;1;0;1;0;1;1;0;;DEF;AJ;AJ;ADM;AJ;ADM;AJ;ADM;ADM;AJ;DEF;;;;;;;;;;;;;;;;
+1290;915;LETTRES;21100053;A7;B7;xx;mail7@etudiant.univ-reims.fr;3LA323;L2 ANGLAIS-ESPAGNOL;15/07/2013;18/11/2013;1;initiale;01;Etudiant;;#REF!;0;1;1;1;-1;-1;-1;-1;-1;-1;;ADM;ADM;ADM;ADM;ADM;ADM;ADM;ADM;ADM;ADM;ADM;;2011;2012;;;2011;2011;2012;2011;2012;2011;;;;;
