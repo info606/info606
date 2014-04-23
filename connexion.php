@@ -5,6 +5,7 @@ header('Refresh: 3; URL=index.php');
 
 require_once("/outils_php/autoload.php");
 require_once("/outils_php/connexion.pdo.class.php");
+require_once("outils.php");
 
 $login="";
 $pwd="";
@@ -86,10 +87,10 @@ HTML;
 				$_SESSION["nomEtudiant"]=$etudiantRecup->nomEtudiant;
 				$_SESSION["prenomEtudiant"]=$etudiantRecup->prenomEtudiant;
 				$_SESSION["mailEtudiant"]=$etudiantRecup->mailEtudiant;
-				$_SESSION["dateNaisEtudiant"]=$etudiantRecup->dateNaisEtudiant;
+				$_SESSION["dateNaisEtudiant"]=dateUS2FR($etudiantRecup->dateNaisEtudiant);
 				$_SESSION["loginEtudiant"]=$etudiantRecup->loginEtudiant;
-				$_SESSION["dateIAEEtudiant"]=$etudiantRecup->dateIAEEtudiant;
-				$_SESSION["dateIAC2IEtudiant"]=$etudiantRecup->dateIAC2IEtudiant;
+				$_SESSION["dateIAEEtudiant"]=dateUS2FR($etudiantRecup->dateIAEEtudiant);
+				$_SESSION["dateIAC2IEtudiant"]=dateUS2FR($etudiantRecup->dateIAC2IEtudiant);
 				$_SESSION["numRegime"]=$etudiantRecup->numRegime;
 				$_SESSION["idEtape"]=$etudiantRecup->idEtape;
 				$_SESSION["C2IValide"]=$etudiantRecup->C2IValide;

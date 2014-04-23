@@ -160,7 +160,6 @@ SQL
 			$e = new Etape();
 
 			$e->idEtape = $res['IDETAPE'];
-			$e->idEtape = $res['IDETAPE'];
 			$e->idCursus = $res['IDCURSUS'];
 			$e->numComposante = $res['NUMCOMPOSANTE'];
 			$e->libCourtEtape = $res['LIBCOURTETAPE'];

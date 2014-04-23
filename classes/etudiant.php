@@ -29,9 +29,9 @@ class Etudiant
 								$mdp="",
 								$dateIAEE="",
 								$dateIAC2I="",
-                                $C2IValide=0,
 								$numRegime="",
-								$idEtape="")
+								$idEtape="",
+                                $C2IValide=0)
 	{
 		$this->numEtudiant = $num;
 		$this->nomEtudiant = $nom;

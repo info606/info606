@@ -9,8 +9,10 @@ $menu = getMenuEnseignant();
 if(verifConnexion("enseignant")){
 	if(isset($_POST["action"])){
 		if($_POST["action"] == "modifEtudiant"){
+			echo $_POST["numEtudiant"]." - ".$_POST["nomEtudiant"]." - ".$_POST["prenomEtudiant"]." - ".$_POST["mailEtudiant"]." - ".dateFR2US($_POST["naisEtudiant"])." - ".$_POST["loginEtudiant"]." - ".$_POST["naisEtudiant"]." - ".dateFR2US($_POST["dateIAEEtudiant"])." - ".dateFR2US($_POST["dateIAC2IEtudiant"])." - ".$_POST["regimeEtudiant"]." - ".$_POST["etapeEtudiant"];
 			$etudiantControleur = new EtudiantControleur();
-			$e = new Etudiant($_POST["numEtudiant"],$_POST["nomEtudiant"],$_POST["prenomEtudiant"],$_POST["mailEtudiant"],$_POST["naisEtudiant"],$_POST["loginEtudiant"],$_POST["mdpEtudiant"],$_POST["dateIAEEtudiant"],$_POST["dateIAC2IEtudiant"],$_POST["regimeEtudiant"],$_POST["etapeEtudiant"]);
+			$e = new Etudiant($_POST["numEtudiant"],$_POST["nomEtudiant"],$_POST["prenomEtudiant"],$_POST["mailEtudiant"],dateFR2US($_POST["naisEtudiant"]),$_POST["loginEtudiant"],$_POST["mdpEtudiant"],dateFR2US($_POST["dateIAEEtudiant"]),dateFR2US($_POST["dateIAC2IEtudiant"]),$_POST["regimeEtudiant"],$_POST["etapeEtudiant"]);
+			print_r($e);
 			$etudiantControleur->etudiantManager->maj($e);
 
 			header('Location: gestionbase.php');
@@ -30,8 +32,10 @@ if(verifConnexion("enseignant")){
 			header('Location: gestionbase.php');
 		}
 		else if($_POST["action"] == "creaEtudiant"){
+			//echo $_POST["numEtudiant"]." - ".$_POST["nomEtudiant"]." - ".$_POST["prenomEtudiant"]." - ".$_POST["mailEtudiant"]." - ".dateFR2US($_POST["naisEtudiant"])." - ".$_POST["loginEtudiant"]." - ".$_POST["naisEtudiant"]." - ".dateFR2US($_POST["dateIAEEtudiant"])." - ".dateFR2US($_POST["dateIAC2IEtudiant"])." - ".$_POST["regimeEtudiant"]." - ".$_POST["etapeEtudiant"];
 			$etudiantControleur = new EtudiantControleur();
-			$e = new Etudiant($_POST["numEtudiant"],$_POST["nomEtudiant"],$_POST["prenomEtudiant"],$_POST["mailEtudiant"],$_POST["naisEtudiant"],$_POST["loginEtudiant"],$_POST["naisEtudiant"],$_POST["dateIAEEtudiant"],$_POST["dateIAC2IEtudiant"],$_POST["regimeEtudiant"],$_POST["etapeEtudiant"]);
+			$e = new Etudiant($_POST["numEtudiant"],$_POST["nomEtudiant"],$_POST["prenomEtudiant"],$_POST["mailEtudiant"],dateFR2US($_POST["naisEtudiant"]),$_POST["loginEtudiant"],$_POST["naisEtudiant"],dateFR2US($_POST["dateIAEEtudiant"]),dateFR2US($_POST["dateIAC2IEtudiant"]),$_POST["regimeEtudiant"],$_POST["etapeEtudiant"]);
+			//print_r($e);
 			$etudiantControleur->etudiantManager->ajouter($e);
 
 			header('Location: gestionbase.php');

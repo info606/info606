@@ -76,7 +76,7 @@ if((isset($_POST["etudiant"]) && !empty($_POST["etudiant"]) && $_POST["etudiant"
 
 	$etudiant = $etudiantControleur->etudiantManager->recupererParNum($_POST["etudiant"]);
 	$etapeControleur = new EtapeControleur();
-	$etape = $etapeControleur->etapeManager->recupererParNum($etudiant->codeEtape);
+	$etape = $etapeControleur->etapeManager->recupererParNum($etudiant->idEtape);
 	$epreuveControleur = new EpreuveControleur();
 	$tabEpreuve = $epreuveControleur->epreuveManager->recupererParNumComposante($etape->numComposante);
 	

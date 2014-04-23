@@ -135,7 +135,7 @@ SQL
 		$e->dateIAC2IEtudiant = $res['DATEIAC2IETUDIANT'];
 		$e->numRegime = $res['NUMREGIME'];
 		$e->idEtape = $res['IDETAPE'];
-		$e->C2IValide = $res['C2IValide'];
+		$e->C2IValide = $res['C2IVALIDE'];
 
 		return $e;
 	}
@@ -183,7 +183,7 @@ SQL
 		$e->dateIAC2IEtudiant = $res['DATEIAC2IETUDIANT'];
 		$e->numRegime = $res['NUMREGIME'];
 		$e->idEtape = $res['IDETAPE'];
-		$e->C2IValide = $res['C2IValide'];
+		$e->C2IValide = $res['C2IVALIDE'];
 
 		return $e;
 	}
@@ -213,7 +213,7 @@ SQL
 			$e->dateIAC2IEtudiant = $res['DATEIAC2IETUDIANT'];
 			$e->numRegime = $res['NUMREGIME'];
 			$e->idEtape = $res['IDETAPE'];
-			$e->C2IValide = $res['C2IValide'];
+			$e->C2IValide = $res['C2IVALIDE'];
 
 			$tabEtudiant[] = $e; 
 		}

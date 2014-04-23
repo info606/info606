@@ -88,7 +88,7 @@ HTML;
 					if($tab[0][$j]==$nomEp){
 						$date = substr($tabValidation[$k]->dateValidation,8,2)."-".substr($tabValidation[$k]->dateValidation,5,2)."-".$anneeCoup;
 						//$tab[$i][$j]="<td class='success'>Validée le ".$date."</td>";
-						$tab[$i][$j]="Validée le ".$date;
+						$tab[$i][$j]="V-".$date;
 					}
 				}
 			}
@@ -107,7 +107,7 @@ HTML;
 		}
 
 		if($col==1)
-			$tab[$nbrLigne][$i]="Validée";
+			$tab[$nbrLigne][$i]="V-Validée";
 		else
 			$tab[$nbrLigne][$i]="Non validée";
 	}
@@ -125,7 +125,7 @@ HTML;
 				$html.="<td class='danger'>".$tab[$i][$j]."</td>";
 			}
 			else if(substr($tab[$i][$j],0,1) == 'V'){
-				$html.="<td class='success'>".$tab[$i][$j]."</td>";
+				$html.="<td class='success'>".substr($tab[$i][$j],2)."</td>";
 			}
 			else{
 				$html.="<td>".$tab[$i][$j]."</td>";

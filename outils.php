@@ -47,4 +47,20 @@ function verifConnexion($typePageAutorisee){
 		return false;
 }
 
+function dateFR2US($date)
+{
+  $date = explode('/', $date);
+  $date = array_reverse($date);
+  $date = implode('-', $date);
+  return $date;
+}
+
+function dateUS2FR($date)
+{
+  $date = explode('-', $date);
+  $date = array_reverse($date);
+  $date = implode('/', $date);
+  return $date;
+}
+
 ?>

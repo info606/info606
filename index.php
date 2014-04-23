@@ -131,7 +131,7 @@ $html .= <<<HTML
 							<span>
 								Vous devez entrez:<br>
 								- login : votre login de bureau virtuel<br>
-								- mot de passe : votre date de naissance sous la forme JJMMAAAA
+								- mot de passe : votre date de naissance sous la forme JJ/MM/AAAA
 							</span>
 						</a>
 					</div>

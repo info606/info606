@@ -41,6 +41,9 @@ if(isset($_GET['type']) && !empty($_GET['type'])){
 			$tabRegime = $regimeControleur->regimeManager->recupererTout();
 			$etapeControleur = new EtapeControleur();
 			$tabEtape = $etapeControleur->etapeManager->recupererTout();
+			$dateNais = dateUS2FR($e->dateNaisEtudiant);
+			$dateiae = dateUS2FR($e->dateIAEEtudiant);
+			$datec2i = dateUS2FR($e->dateIAC2IEtudiant);
 
 $html.=<<<HTML
 <form action="modifbase.php" method="POST" class="form-horizontal" role="form">
@@ -73,7 +76,7 @@ $html.=<<<HTML
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Date de naissance</label>
 		<div class="col-sm-4">
-			<input name="naisEtudiant" type="text" class="form-control" id="inputEmail3" placeholder="Date de naissance de l'étudiant" value="{$e->dateNaisEtudiant}">
+			<input name="naisEtudiant" type="text" class="form-control" id="inputEmail3" placeholder="Date de naissance de l'étudiant" value="{$dateNais}">
 		</div>
 	</div>
 	<div class="form-group">
@@ -85,13 +88,13 @@ $html.=<<<HTML
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Date IAE</label>
 		<div class="col-sm-4">
-			<input name="dateIAEEtudiant" type="text" class="form-control" id="inputEmail3" placeholder="Date IAE de l'étudiant" value="{$e->dateIAEEtudiant}">
+			<input name="dateIAEEtudiant" type="text" class="form-control" id="inputEmail3" placeholder="Date IAE de l'étudiant" value="{$dateiae}">
 		</div>
 	</div>
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Date Inscription c2i</label>
 		<div class="col-sm-4">
-			<input name="dateIAC2IEtudiant" type="text" class="form-control" id="inputEmail3" placeholder="Date IAC2I l'étudiant" value="{$e->dateIAC2IEtudiant}">
+			<input name="dateIAC2IEtudiant" type="text" class="form-control" id="inputEmail3" placeholder="Date IAC2I l'étudiant" value="{$datec2i}">
 		</div>
 	</div>
 	<div class="form-group">
@@ -122,10 +125,10 @@ HTML;
 
 foreach($tabEtape as $t){
 	if($t != null){
-		if($t->codeEtape == $e->codeEtape)
-			$html.="<option value='".$t->codeEtape."' selected>".$t->libLongEtape."</option>\n";
+		if($t->idEtape == $e->idEtape)
+			$html.="<option value='".$t->idEtape."' selected>".$t->libLongEtape."</option>\n";
 		else
-			$html.="<option value='".$t->codeEtape."'>".$t->libLongEtape."</option>\n";
+			$html.="<option value='".$t->idEtape."'>".$t->libLongEtape."</option>\n";
 	}
 	
 }
@@ -286,7 +289,7 @@ $html.=<<<HTML
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Date de naissance</label>
 		<div class="col-sm-4">
-			<input name="naisEtudiant" type="text" class="form-control" id="inputEmail3" placeholder="Date de naissance de l'étudiant">
+			<input name="naisEtudiant" type="text" class="form-control" id="inputEmail3" placeholder="Date de naissance de l'étudiant"> (format: JJ/MM/AAAA)
 		</div>
 	</div>
 	<div class="form-group">
@@ -298,13 +301,13 @@ $html.=<<<HTML
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Date IAE</label>
 		<div class="col-sm-4">
-			<input name="dateIAEEtudiant" type="text" class="form-control" id="inputEmail3" placeholder="Date IAE de l'étudiant">
+			<input name="dateIAEEtudiant" type="text" class="form-control" id="inputEmail3" placeholder="Date IAE de l'étudiant"> (format: JJ/MM/AAAA)
 		</div>
 	</div>
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Date Inscription c2i</label>
 		<div class="col-sm-4">
-			<input name="dateIAC2IEtudiant" type="text" class="form-control" id="inputEmail3" placeholder="Date IAC2I l'étudiant">
+			<input name="dateIAC2IEtudiant" type="text" class="form-control" id="inputEmail3" placeholder="Date IAC2I l'étudiant"> (format: JJ/MM/AAAA)
 		</div>
 	</div>
 	<div class="form-group">
@@ -330,9 +333,9 @@ $html.=<<<HTML
 			<select name="etapeEtudiant" class="form-control">
 HTML;
 
-foreach($tabEtape as $t){
-	if($t != null){
-		$html.="<option value='".$t->codeEtape."'>".$t->libLongEtape."</option>\n";
+foreach($tabEtape as $te){
+	if($te != null){
+		$html.="<option value='".$te->idEtape."'>".$te->libLongEtape."</option>\n";
 	}
 	
 }
