@@ -118,7 +118,7 @@ if((isset($_POST["etudiant"]) && !empty($_POST["etudiant"]) && $_POST["etudiant"
 
 					for($i=1;$i<count($tabEp[0]);$i++){
 						if($tabEp[0][$i]==$v->idEpreuve)
-							$tabEp[2][$i]="<td class='success'>Validée le ".substr($v->dateValidation,8,2)."/".substr($v->dateValidation,5,2)."/".substr($v->dateValidation,0,4);
+							$tabEp[2][$i]="<td class='success'>".substr($v->dateValidation,8,2)."/".substr($v->dateValidation,5,2)."/".substr($v->dateValidation,0,4);
 					}
 
 				}
