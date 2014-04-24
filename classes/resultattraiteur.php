@@ -31,7 +31,6 @@ class ResultatTraiteur extends Traiteur
 
 	public function traiter($filename, $definitif=false)
 	{
-		echo "bonjour";
 		try{
 			$this->csvLoader = new CSVLoader($this->path.$filename, array_merge($this->titres,$this->epreuvesLib), ";");
 		}
