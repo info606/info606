@@ -53,7 +53,7 @@ SQL
 	{
 		// Si l'un etudiant a déjà le même id ou le même login on n'accepte pas
 		if ($this->exists($e))
-			throw new Exception("Impossible d'ajouter l'étudiant car le numéro ".$e->numEtudiant." est déjà utilisé.");
+			return;
 
 		$q = $this->_myPDO->prepare(<<<SQL
 			INSERT INTO etudiant(numEtudiant, numRegime, idEtape, nomEtudiant, prenomEtudiant, mailEtudiant, dateNaisEtudiant, loginEtudiant, mdpEtudiant, dateIAEEtudiant, dateIAC2IEtudiant, C2IValide)

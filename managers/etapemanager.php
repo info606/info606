@@ -17,12 +17,14 @@ class EtapeManager
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Etape
-			WHERE codeEtape=:code AND versionEtape =:version AND libLongEtape LIKE :libLong
+			WHERE (codeEtape=:code AND versionEtape =:version AND numComposante=:numComposante)
+				OR idEtape=:idEtape
 SQL
 		);
 		$q->bindValue(':code', 		$e->codeEtape);
 		$q->bindValue(':version', 		$e->versionEtape);
-		$q->bindValue(':libLong', 		$e->libLongEtape);
+		$q->bindValue(':numComposante', 		$e->numComposante);
+		$q->bindValue(':idEtape', 		$e->idEtape);
 		$q->execute();
 		$data = $q->fetch(PDO::FETCH_ASSOC);
 		if ($data['nb'] != 0)
@@ -35,7 +37,10 @@ SQL
 	public function ajouter(Etape $e)
 	{
 		if ($this->exists($e))
+		{
+			var_dump($e);
 			return;
+		}
 
 		$q = $this->_myPDO->prepare(<<<SQL
 			INSERT INTO etape(codeEtape, idCursus, numComposante, libCourtEtape, versionEtape, libLongEtape)
@@ -68,19 +73,15 @@ SQL
 
 	public function recupererNum(Etape $e)
 	{
-		$e = new Etape();
-
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Etape
-			WHERE codeEtape=:code AND versionEtape =: version AND libLongEtape LIKE :libLong
+			WHERE codeEtape LIKE :code AND numComposante=:numComposante
 SQL
 		);
 		$q->bindValue(':code', 		$e->codeEtape);
-		$q->bindValue(':version', 		$e->versionEtape);
-		$q->bindValue(':libLong', 		$e->libLongEtape);
-		$q->execute();
-
+		$q->bindValue(':numComposante', 		$e->numComposante, PDO::PARAM_INT);
+		$q->execute(); 
 		$data = $q->fetch(PDO::FETCH_ASSOC);
 		if($data['nb'] == 0)
 			throw new Exception("Il n'existe aucune étape correspondante.");
@@ -88,14 +89,15 @@ SQL
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT idEtape
 			FROM etape
-			WHERE codeEtape=:code AND versionEtape =: version AND libLongEtape LIKE :libLong
+			WHERE codeEtape=:code AND numComposante=:numComposante
+			ORDER BY versionEtape DESC
 SQL
 		);
 		$q->bindValue(':code', 		$e->codeEtape);
-		$q->bindValue(':version', 		$e->versionEtape);
-		$q->bindValue(':libLong', 		$e->libLongEtape);
+		$q->bindValue(':numComposante', 		$e->numComposante);
 		$q->execute();
 
+		/* Si il y a plusieurs résultat on récupère le résultat avec la version la plus récente, soit le premier résultat */
 		$res = $q->fetch(PDO::FETCH_ASSOC);
 
 		return $res['idEtape'];

@@ -17,12 +17,11 @@ class CursusManager
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Cursus
-			WHERE codeCursus=:code AND libCursus LIKE :lib AND niveau=:niveau
+			WHERE codeCursus=:code AND libCursus LIKE :lib
 SQL
 		);
 		$q->bindValue(':code', 		$c->codeCursus);
 		$q->bindValue(':lib', 		$c->libCursus);
-		$q->bindValue(':niveau', 	$c->niveau);
 		$q->execute();
 		$data = $q->fetch(PDO::FETCH_ASSOC);
 		if ($data['nb'] != 0)
@@ -38,14 +37,13 @@ SQL
 			return;
 
 		$q = $this->_myPDO->prepare(<<<SQL
-			INSERT INTO cursus(codeCursus, libCursus, niveau)
-			VALUES (:code, :lib, :niveau)
+			INSERT INTO cursus(codeCursus, libCursus)
+			VALUES (:code, :lib)
 SQL
 		);
 
 		$q->bindValue(':code', 		$c->codeCursus);
 		$q->bindValue(":lib", 		$c->libCursus);
-		$q->bindValue(":niveau", 		$c->niveau);
 		$q->execute();
 	}
 
@@ -68,12 +66,11 @@ SQL
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Cursus
-			WHERE codeCursus=:code AND libCursus LIKE :lib AND niveau=:niveau
+			WHERE codeCursus=:code AND libCursus LIKE :lib
 SQL
 		);
 		$q->bindValue(':code', 		$c->codeCursus);
 		$q->bindValue(':lib', 		$c->libCursus);
-		$q->bindValue(':niveau', 	$c->niveau);
 		$q->execute();
 
 		$data = $q->fetch(PDO::FETCH_ASSOC);
@@ -83,12 +80,11 @@ SQL
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT idCursus
 			FROM cursus
-			WHERE codeCursus=:code AND libCursus LIKE :lib AND niveau=:niveau
+			WHERE codeCursus=:code AND libCursus LIKE :lib
 SQL
 		);
 		$q->bindValue(':code', 		$c->codeCursus);
 		$q->bindValue(':lib', 		$c->libCursus);
-		$q->bindValue(':niveau', 	$c->niveau);
 		$q->execute();
 
 		$res = $q->fetch(PDO::FETCH_ASSOC);
@@ -130,7 +126,6 @@ SQL
 		$c->idCursus = $res['IDCURSUS'];
 		$c->codeCursus = $res['CODECURSUS'];
 		$c->libCursus = $res['LIBCURSUS'];
-		$c->niveau = $res['NIVEAU'];
 
 		return $c;
 	}
@@ -152,7 +147,6 @@ SQL
 			$c->idCursus = $res['IDCURSUS'];
 			$c->codeCursus = $res['CODECURSUS'];
 			$c->libCursus = $res['LIBCURSUS'];
-			$c->niveau = $res['NIVEAU'];
 
 			$tabCursus[] = $c; 
 		}
@@ -167,13 +161,12 @@ SQL
 
 		$q = $this->_myPDO->prepare(<<<SQL
 			UPDATE Cursus
-			SET	codeCursus=:code, libCursus LIKE :lib, niveau=:niveau
+			SET	codeCursus=:code, libCursus LIKE :lib
 			WHERE idCursus=:num
 SQL
 		);
 
 		$q->bindValue(":lib", 		$c->libCursus);
-		$q->bindValue(":niveau", 		$c->niveau);
 		$q->bindValue(":code", 		$c->codeCursus);
 
 		$q->execute();

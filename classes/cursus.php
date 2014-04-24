@@ -9,13 +9,11 @@ class Cursus
     private $idCursus;
 	private $codeCursus;
 	private $libCursus;
-	private $niveau;
 
 	public function __construct($code="", $lib="", $niveau="")
 	{
 		$this->codeCursus = $code;
 		$this->libCursus = $lib;
-		$this->niveau = $niveau;
 	}
 
     public function __get($attribut)

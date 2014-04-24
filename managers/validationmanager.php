@@ -224,7 +224,7 @@ SQL
 
 		$q = $this->_myPDO->prepare(<<<SQL
 			UPDATE Validation
-			SET	numEnseignant=:numEns, numEtudiant=:numEt, idEpreuve=:idEp, dateValidation=(NOW(), valeurValidation=:valeurValidation)
+			SET	numEnseignant=:numEns, numEtudiant=:numEt, idEpreuve=:idEp, dateValidation=NOW(), valeurValidation=:valeurValidation
 			WHERE idValidation=:idVal
 SQL
 		);

@@ -35,7 +35,7 @@ SQL
 	public function ajouter(Epreuve $e)
 	{
 		if ($this->exists($e))
-			throw new Exception("Impossible d'ajouter l'épreuve ".$e->libEpreuve." de la composante ".$e->numComposante.". Données déjà existantes.");
+			return;
 
 		$q = $this->_myPDO->prepare(<<<SQL
 			INSERT INTO epreuve(numComposante, libEpreuve)
