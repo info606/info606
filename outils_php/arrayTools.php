@@ -1,5 +1,7 @@
 <?php
 
+require_once('stringTools.php');
+
 function emptyFilter($var)
 {
     return (!empty($var));
@@ -31,4 +33,19 @@ function arrayDateSort( $a, $b)
 
 	return 0;
 
+}
+
+function arrayToUTF8($array)
+{
+	foreach ($array as $key=>$value) {
+		$array[$key] = utf8_encode($value);
+	}
+	return $array;
+}
+
+function arrayToNoAccent(&$array)
+{
+	foreach ($array as $key=>$value) {
+		$array[$key] = minusculesSansAccents($value);
+	}
 }
