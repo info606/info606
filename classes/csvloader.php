@@ -25,7 +25,7 @@ class CSVLoader{
 		$this->file->setCsvControl($delimiter, $enclosure, $escape);
 
 		/* On recherche la ligne des titres */
-		$this->titleLine = 1;
+		$this->titleLine = 0;
 		$finded = false;
 		if(count($titles) > 0)
 		{
@@ -35,10 +35,14 @@ class CSVLoader{
 				/* On récupère la ligne courante */
 				$line = $this->file->current();
 				/* On enlève les colonnes vides */
-				$line = array_filter($line, "emptyFilter");
-				/* On regarde si la ligne contient les titres */
-				$finded = $this->isTitleLine($line, $titles);
-
+				if($line)
+				{
+					$line = array_filter($line, "emptyFilter");
+					$line = arrayToUTF8($line);
+					/* On regarde si la ligne contient les titres */
+					$finded = $this->isTitleLine($line, $titles);
+				}
+				
 				/* Si la ligne de titre n'a pas été trouvée, on passe à la ligne suivante */
 				if(!$finded)
 				{
@@ -50,7 +54,10 @@ class CSVLoader{
 			if(!$finded)
 			{
 				throw new Exception("Le fichier n'est pas valide car tous les titres nécessaires n'ont pas pu être trouvés.");
-			}		}
+			}
+			else
+				var_dump($this->titleLine);
+		}
 	}
 
 	private function isTitleLine($line, $array)
@@ -83,7 +90,7 @@ class CSVLoader{
 		$this->file->seek($this->titleLine);
 		$titles = $this->file->current();
 		$titles = array_filter($titles, "emptyFilter");
-
+		$titles = arrayToUTF8($titles);
 		return $titles;
 	}
 
@@ -93,7 +100,6 @@ class CSVLoader{
 		$titles = $this->getHeadLine();
 		$index = 0;
 		$contains = false;
-
 		/* On parcourt les colonnes de titres */
 		while($index < count($titles) && !$contains)
 		{
