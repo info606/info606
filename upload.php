@@ -14,6 +14,18 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 	/* On vide les erreurs */
 	$_SESSION["erreurs"] = array();
 
+echo <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.css">
+		<link type="text/css" rel="stylesheet" href="css/style.css">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>c2i-1</title>
+	</head>
+	<body class="container-fluid">
+HTML;
+
 	$compControleur = new ComposanteControleur();
 	$composante = $compControleur->composanteManager->recupererParNum($_SESSION["numComposante"]);
 	$dossier = "donnees/".$_POST["type"]."/";
@@ -35,15 +47,16 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 		{
 			case "resultats":
 				$resT = new ResultatTraiteur();
-				echo "upload appel<br>";
 				$resT->traiter($nomFichier);
 				// $resT->maj(); // Test de la mise à jour
 				break;
 			case "etapes":
-				/* Traitement du fichier d'étape */
+				$etaT = new EtapeTraiteur();
+				$etaT->traiter($nomFichier);
 				break;
 			case "etudiants":
-				/* Traitement du fichier d'étudiants */
+				$insT = new InscriptionTraiteur();
+				$insT->traiter($nomFichier);
 				break;
 		}
 	}
@@ -52,8 +65,13 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 		$_SESSION['erreurs'][] = "Impossible d'uploader le fichier.";
 	}
 
-	echo "bonjour";
 	var_dump($_SESSION['erreurs']);
+
+
+echo <<<HTML
+	</body>
+</html>
+HTML;
 }
 else
 {
