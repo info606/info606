@@ -102,7 +102,15 @@ class InscriptionTraiteur extends Traiteur
 			$etudiant->idEtape = $etape->idEtape;
 			$etudiant->mdpEtudiant = dateToPassword($ligne[$indexDateNais]);
 			/* Insérer Etudiant */
-			$this->etudiantM->ajouter($etudiant);
+			if($this->etudiantM->exists($etudiant))
+			{
+				$this->etudiantM->maj($etudiant);
+			}
+			else
+			{
+				$this->etudiantM->ajouter($etudiant);
+			}
+			
 
 			
 			foreach ($this->epreuvesLib as $value) {
