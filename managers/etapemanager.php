@@ -17,7 +17,7 @@ class EtapeManager
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Etape
-			WHERE (codeEtape=:code AND versionEtape =:version AND numComposante=:numComposante)
+			WHERE (codeEtape=:code AND versionEtape =:version AND numComposante=:numComposante AND idCursus=:cursus)
 				OR idEtape=:idEtape
 SQL
 		);
@@ -25,6 +25,7 @@ SQL
 		$q->bindValue(':version', 		$e->versionEtape);
 		$q->bindValue(':numComposante', 		$e->numComposante);
 		$q->bindValue(':idEtape', 		$e->idEtape);
+		$q->bindValue(':cursus', 		$e->idCursus);
 		$q->execute();
 		$data = $q->fetch(PDO::FETCH_ASSOC);
 		if ($data['nb'] != 0)
@@ -76,12 +77,14 @@ SQL
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Etape
-			WHERE codeEtape LIKE :code AND numComposante=:numComposante AND versionEtape=:version
+			WHERE codeEtape=:code AND versionEtape =:version AND numComposante=:numComposante AND idCursus=:cursus
 SQL
 		);
+		$q->bindValue(':cursus', 		$e->idCursus);
 		$q->bindValue(':code', 		$e->codeEtape);
 		$q->bindValue(':numComposante', 		$e->numComposante, PDO::PARAM_INT);
 		$q->bindValue(':version',	$e->versionEtape);
+
 		
 		$q->execute(); 
 		$data = $q->fetch(PDO::FETCH_ASSOC);
@@ -91,12 +94,13 @@ SQL
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT idEtape
 			FROM etape
-			WHERE codeEtape=:code AND numComposante=:numComposante
-			ORDER BY versionEtape DESC
+			WHERE codeEtape=:code AND versionEtape =:version AND numComposante=:numComposante AND idCursus=:cursus
 SQL
 		);
+		$q->bindValue(':cursus', 		$e->idCursus);
 		$q->bindValue(':code', 		$e->codeEtape);
 		$q->bindValue(':numComposante', 		$e->numComposante);
+		$q->bindValue(':version',	$e->versionEtape);
 		$q->execute();
 
 		/* Si il y a plusieurs résultat on récupère le résultat avec la version la plus récente, soit le premier résultat */

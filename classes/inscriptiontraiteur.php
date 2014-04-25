@@ -56,6 +56,7 @@ class InscriptionTraiteur extends Traiteur
 		$indexDateIAE = $this->csvLoader->getIndexTitle(array("date","iae"));
 		$indexDateC2I = $this->csvLoader->getIndexTitle(array("date","C2i"));
 		$indexNumRegime = $this->csvLoader->getIndexTitle(array("régime", "code"));
+		$indexNumRegime = $this->csvLoader->getIndexTitle(array("régime", "code"));
 
 		$data = $this->csvLoader->getData();
 		foreach ($data as $ligne) {

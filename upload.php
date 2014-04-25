@@ -27,10 +27,10 @@ echo <<<HTML
 HTML;
 
 	$compControleur = new ComposanteControleur();
-	$composante = $compControleur->composanteManager->recupererParNum($_SESSION["numComposante"]);
+	$composante = "composante";//$compControleur->composanteManager->recupererParNum($_SESSION["numComposante"]);
 	$dossier = "donnees/".$_POST["type"]."/";
 
-	$nomFichier = $composante->libComposante."_".$_SESSION["loginEnseignant"]."_".date("dmY").".csv";
+	$nomFichier = $composante."_".$_SESSION["loginEnseignant"]."_".date("dmY").".csv";
 	$extension = strrchr($_FILES["fichier"]["name"],'.');
 	if($extension != ".csv")
 	{

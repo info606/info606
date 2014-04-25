@@ -41,6 +41,7 @@ class EtapeTraiteur extends Traiteur
 		
 		$indexCodCursus = $this->csvLoader->getIndexTitle(array("cursus","code"));
 		$indexLibCursus = $this->csvLoader->getIndexTitle(array("cursus","lib"));
+		$indexNiveau = $this->csvLoader->getIndexTitle(array("niveau"));
 
 		$indexCodEtape = $this->csvLoader->getIndexTitle(array("etape","code"));
 		$indexLibCEtape = $this->csvLoader->getIndexTitle(array("etape","lib"));
@@ -54,6 +55,7 @@ class EtapeTraiteur extends Traiteur
 				!array_key_exists($indexLibComp, $ligne) ||
 				!array_key_exists($indexCodCursus, $ligne) ||
 				!array_key_exists($indexLibCursus, $ligne) ||
+				!array_key_exists($indexNiveau, $ligne) ||
 				!array_key_exists($indexCodEtape, $ligne) ||
 				!array_key_exists($indexLibCEtape, $ligne) ||
 				!array_key_exists($indexVersEtape, $ligne) ||
@@ -62,13 +64,17 @@ class EtapeTraiteur extends Traiteur
 				continue;
 			}
 
+			$ligne = arrayToUTF8($ligne);
 			$composante = new Composante();
 			/* Récupération de la composante */
 			$composante->codeComposante = $ligne[$indexCodComp];
 			$composante->libComposante = $ligne[$indexLibComp];
 			
 			/* Insertion de la composante */
-			$this->composanteM->ajouter($composante);
+			if(!$this->composanteM->exists($composante))
+			{
+				$this->composanteM->ajouter($composante);	
+			}
 			$composante->numComposante = $this->composanteM->recupererNum($composante);
 
 
@@ -76,9 +82,13 @@ class EtapeTraiteur extends Traiteur
 			/* Récupération du cursus */
 			$cursus->codeCursus = $ligne[$indexCodCursus];
 			$cursus->libCursus = $ligne[$indexLibCursus];
+			$cursus->niveau = $ligne[$indexNiveau];
 	
 			/* Insertion du cursus */
-			$this->cursusM->ajouter($cursus);
+			if(!$this->cursusM->exists($cursus))
+			{
+				$this->cursusM->ajouter($cursus);
+			}
 			$cursus->idCursus = $this->cursusM->recupererNum($cursus);
 
 			$etape = new Etape();
@@ -91,7 +101,10 @@ class EtapeTraiteur extends Traiteur
 			$etape->idCursus = $cursus->idCursus;
 
 			/* Insertion de l'étape */
-			$this->etapeM->ajouter($etape);
+			if(! $this->etapeM->exists($etape))
+			{
+				$this->etapeM->ajouter($etape);
+			}
 		}
 	}
 

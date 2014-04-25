@@ -17,11 +17,10 @@ class CursusManager
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Cursus
-			WHERE codeCursus=:code AND libCursus LIKE :lib AND niveau=:niveau
+			WHERE codeCursus=:code AND niveau=:niveau
 SQL
 		);
 		$q->bindValue(':code', 		$c->codeCursus);
-		$q->bindValue(':lib', 		$c->libCursus);
 		$q->bindValue(':niveau', $c->niveau);
 		$q->execute();
 		$data = $q->fetch(PDO::FETCH_ASSOC);
@@ -68,11 +67,10 @@ SQL
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Cursus
-			WHERE codeCursus=:code AND libCursus LIKE :lib AND niveau=:niveau
+			WHERE codeCursus=:code AND niveau=:niveau
 SQL
 		);
 		$q->bindValue(':code', 		$c->codeCursus);
-		$q->bindValue(':lib', 		$c->libCursus);
 		$q->bindValue(':niveau', $c->niveau);
 		$q->execute();
 
@@ -83,11 +81,10 @@ SQL
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT idCursus
 			FROM cursus
-			WHERE codeCursus=:code AND libCursus LIKE :lib AND niveau=:niveau
+			WHERE codeCursus=:code AND niveau=:niveau
 SQL
 		);
 		$q->bindValue(':code', 		$c->codeCursus);
-		$q->bindValue(':lib', 		$c->libCursus);
 		$q->bindValue(':niveau', $c->niveau);
 		$q->execute();
 

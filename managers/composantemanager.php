@@ -17,7 +17,7 @@ class ComposanteManager
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Composante
-			WHERE codecomposante=:code AND libcomposante LIKE :lib
+			WHERE codecomposante=:code OR libcomposante LIKE :lib
 SQL
 		);
 		$q->bindValue(':code', 		$c->codeComposante);
