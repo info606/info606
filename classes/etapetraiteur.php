@@ -92,7 +92,7 @@ class EtapeTraiteur extends Traiteur
 				$_SESSION['erreurs'][] = $importErr."il manque la version de l'étape.";
 				continue;
 			}
-			if(!array_key_exists($indexLibLEtape, $lign)
+			if(!array_key_exists($indexLibLEtape, $ligne))
 			{
 				$_SESSION['erreurs'][] = $importErr."il manque le libellé long de l'étape.";
 				continue;
@@ -110,7 +110,6 @@ class EtapeTraiteur extends Traiteur
 				$this->composanteM->ajouter($composante);	
 			}
 			$composante->numComposante = $this->composanteM->recupererNum($composante);
-
 
 			$cursus = new Cursus();
 			/* Récupération du cursus */
@@ -133,37 +132,13 @@ class EtapeTraiteur extends Traiteur
 			$etape->libLongEtape = $ligne[$indexLibLEtape];
 			$etape->numComposante = $composante->numComposante;
 			$etape->idCursus = $cursus->idCursus;
+			var_dump($etape);
 
 			/* Insertion de l'étape */
 			if(! $this->etapeM->exists($etape))
 			{
 				$this->etapeM->ajouter($etape);
 			}
-		}
-	}
-
-	private function majValidation($validation, $admin)
-	{
-		if($this->validationM->exists($v))
-		{
-			$idValid = $this->validationM->recupererNum($v);
-			/* On récupère l'ancienne valeur de la validation */
-			$vRecup = $this->validationM->recupererParNum($idValid);
-
-			/* Cas où la valeur rétrograderait */
-			if($vRecup->valeurValidation > $validation->valeurValidation && !$admin)
-			{
-				throw new Exception("Vous n'avez pas les droits nécessaires pour rétrograder une validation");
-			}
-			else
-			{
-				$v->idValidation = $idValid;
-				$this->validationM->maj($v);
-			}
-		}
-		else
-		{
-			$this->validationM->ajouter($v);
 		}
 	}
 
