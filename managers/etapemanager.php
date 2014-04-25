@@ -76,11 +76,13 @@ SQL
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Etape
-			WHERE codeEtape LIKE :code AND numComposante=:numComposante
+			WHERE codeEtape LIKE :code AND numComposante=:numComposante AND versionEtape=:version
 SQL
 		);
 		$q->bindValue(':code', 		$e->codeEtape);
 		$q->bindValue(':numComposante', 		$e->numComposante, PDO::PARAM_INT);
+		$q->bindValue(':version',	$e->versionEtape);
+		
 		$q->execute(); 
 		$data = $q->fetch(PDO::FETCH_ASSOC);
 		if($data['nb'] == 0)
