@@ -53,109 +53,135 @@ $html .= <<<HTML
 					<br><br>
 HTML;
 
-$afficher = false;
-$validationControleur = new ValidationControleur();
+if((isset($_POST["etudiant"]) && !empty($_POST["etudiant"]) && $_POST["etudiant"]!="none")){
 
-if(isset($_GET["epreuve"]) && isset($_GET["etudiant"]) && isset($_GET["date"])){
-	$epreuve = $_GET["epreuve"];
-	$date = $_GET["date"];
-	$etudiant = $_GET["etudiant"];
-	$enseignant = $_SESSION["numEnseignant"];
-
-	$validation = new Validation($date,$enseignant,$etudiant,$epreuve);
-	$validationControleur->validationManager->ajouter($validation);
-
-	$html .= "<h4 class='h4'>Validation enregistrée.</h4>";
-	$afficher = true;
-}
-
-if((isset($_POST["etudiant"]) && !empty($_POST["etudiant"]) && $_POST["etudiant"]!="none") || $afficher){
-
-	if($afficher)
-		$_POST["etudiant"]=$_GET["etudiant"];
+	$html .= "<table id='tableauEtudiantValidation' class='table table-bordered'>";
 
 	$etudiant = $etudiantControleur->etudiantManager->recupererParNum($_POST["etudiant"]);
+	$validationControleur = new ValidationControleur();
 	$etapeControleur = new EtapeControleur();
 	$etape = $etapeControleur->etapeManager->recupererParNum($etudiant->idEtape);
 	$epreuveControleur = new EpreuveControleur();
 	$tabEpreuve = $epreuveControleur->epreuveManager->recupererParNumComposante($etape->numComposante);
-	
-	$tabValidation = $validationControleur->validationManager->recupererParNumEtudiant($etudiant->numEtudiant);
+	$tabValidation = $validationControleur->validationManager->recupererParNumEtudiantTrieParDate($etudiant->numEtudiant);
 
-	$date = date("Y");
+	$annee = 0;
+	$tab = array();
+	$tab[0] = array("Epreuve");
+	$tab[1] = array("Année");
 
-	$html .= "<table id='tableauEtudiantValidation' class='table table-bordered'>"/*\n<tr><td>Année"*/;
+	$k=2;
+	for($i=1;$i<count($tabValidation);$i++){
+		$anneeCoup = substr($tabValidation[$i]->dateValidation,0,4);
+		if($anneeCoup != $annee){
+			$annee = $anneeCoup;
+			$tab[$k]=array($anneeCoup);
+			$k++;
+		}
+	}
 
-	$i=1;
-	$tabEp = array();
-	$tabEp[0]=array("");
-	$tabEp[1]=array("<tr><td>");
-	$tabEp[2]=array("<tr><td>Sur 3 ans");
-	$tabEp[3]=array("<tr><td>Année en cours");
-	foreach($tabEpreuve as $t){
+	for($i=1;$i<count($tabEpreuve);$i++){
+		$tab[0][$i]=$tabEpreuve[$i]->idEpreuve;
+		$tab[1][$i]=$tabEpreuve[$i]->libEpreuve;
+	}
+
+	// Initialisation par défaut à NV
+	for($i=2;$i<count($tab);$i++){
+		for($j=1;$j<count($tab[0]);$j++){
+			$tab[$i][$j]="N.V";
+		}
+	}
+
+	// Remplissage du tableau
+	foreach($tabValidation as $t){
 		if($t != NULL){
-			//$html.="<td>".$t->libEpreuve."</td>";
-			$tabEp[0][$i]=$t->idEpreuve;
-			$tabEp[1][$i]="<td>".$t->libEpreuve;
-			$i++;
+			$date = $t->dateValidation;
+			$dateDecoup = substr($date,0,4);
+			$epreuve = $t->idEpreuve;
+			$val = $t->valeurValidation;
+
+			$continu = 1;
+			for($i=2;$i<count($tab) && $continu==1;$i++){
+				if($tab[$i][0] == $dateDecoup)
+					$continu = 0;
+			}
+
+			$continu=1;
+			for($j=1;$j<count($tab[0]) && $continu==1;$j++){
+				if($tab[0][$j] == $epreuve)
+					$continu = 0;
+			}
+
+			if($val == -1){
+				$tab[$i-1][$j-1] = "E.C";
+			}
+			else if($val == 0){
+				$tab[$i-1][$j-1] = "N.V";
+			}
+			else
+				$tab[$i-1][$j-1]=dateUS2Fr($date);
 		}
 	}
 
-	for($i=1;$i<count($tabEp[0]);$i++){
-		$tabEp[2][$i]="<td class='danger'>Non validée";
-		//$tabEp[3][$i]="N";
-		$tabEp[3][$i]="<td><a href='gestionc2i.php?etudiant=".$etudiant->numEtudiant."&epreuve=".$tabEp[0][$i]."&date=".date("Y-m-d")."'><button type='button' class='btn btn-success'>Valider</button></a></td>";
+	// Ajout de la ligne final sur 3 ans
+	$date = date("Y");
+	$nbrLigne = count($tab);
+	$tab[$nbrLigne][0]="Sur 3 ans";
+	for($i=1;$i<count($tab[0]);$i++){
+		$col =0;
+		for($j=2;$j<$nbrLigne;$j++){
+			if(substr($tab[$j][$i],0,1) != 'E' && substr($tab[$j][$i],0,1) != 'N' && ($date-3)<= $tab[$j][0])
+				$col=1;
+		}
+
+		if($col==1)
+			$tab[$nbrLigne][$i]="Validée";
+		else
+			$tab[$nbrLigne][$i]="Non validée";
 	}
 
-	/*$html .= "\n<tr class='active'><td>Sur 3 ans";*/
-	foreach($tabValidation as $v){
-		$oldDate="0";
-		if($v!=NULL){
-			if(substr($v->dateValidation,0,4)>=($date-3)){
-				$dateCoup = substr($v->dateValidation,0,4);
-				if($dateCoup > $oldDate){
-					$oldDate = substr($v->dateValidation,0,4);
 
-					for($i=1;$i<count($tabEp[0]);$i++){
-						if($tabEp[0][$i]==$v->idEpreuve)
-							$tabEp[2][$i]="<td class='success'>".substr($v->dateValidation,8,2)."/".substr($v->dateValidation,5,2)."/".substr($v->dateValidation,0,4);
-					}
+	// Affichage final avec colorisation
+	for($i=1;$i<count($tab);$i++){
+		// S'il s'agit de l'avant dernière ligne, on saute une ligne
+		if($i == count($tab)-1){
+			$html.="<tr><td>";
+			for($j=1;$j<count($tab[0]);$j++)
+				$html.="<td class='active'>";
+			$html.="</tr>";
+		}
 
-				}
+		$html.="<tr>";
 
+		for($j=0;$j<count($tab[0]);$j++){
+			if($i>1 && $j>0){
+				if(substr($tab[$i][$j],0,1) == "E")
+					$html.="<td class='info'>".$tab[$i][$j];
+				else if(substr($tab[$i][$j],0,1) == "N")
+					$html.="<td class='danger'>".$tab[$i][$j];
+				else
+					$html.="<td class='success'>".$tab[$i][$j];
+			}
+			else{
+					$html.="<td>".$tab[$i][$j];
 			}
 		}
-	}
-
-	foreach($tabValidation as $v){
-		if($v != null){
-			$dateCoup = substr($v->dateValidation,0,4);
-
-			for($i=1;$i<count($tabEp[0]);$i++){
-				if($tabEp[0][$i]==$v->idEpreuve){
-					if($dateCoup == $date){
-						$tabEp[3][$i]="<td class='success'>Déjà validée</td>";
-					}
-					/*else{
-						$tabEp[3][$i]="<td><a href='gestionc2i.php?etudiant=".$etudiant->numEtudiant."&epreuve=".$tabEp[0][$i]."&enseignant=".$_SESSION["numEnseignant"]."&date=".date("Y-m-d")."'><button type='button' class='btn btn-success'>Valider</button></a></td>";
-					}*/
-				}
-				else{
-					if($tabEp[3][$i] == "N"){
-						$tabEp[3][$i]="<td><a href='gestionc2i.php?etudiant=".$etudiant->numEtudiant."&epreuve=".$tabEp[0][$i]."&date=".date("Y-m-d")."'><button type='button' class='btn btn-success'>Valider</button></a></td>";
-					}
-				}
-			}
-		}
-	}
-
-	for($i=1;$i<count($tabEp);$i++){
-		for($j=0;$j<count($tabEp[0]);$j++){
-			$html.=$tabEp[$i][$j];
-		}
+			
 	}
 
 	$html .="</table>";
+
+$html .= <<<HTML
+		<br>	
+			<dl class="dl-horizontal"><strong>Légende :</strong>
+				<dt>N.V</dt>
+			  	<dd>Non Validé (épreuve passée mais échouée).</dd>
+			  	<dt>E.C</dt>
+			  	<dd>En Cours pour l'année universitaire.</dd>
+			  	<dt>Date</dt>
+			  	<dd>Validée</dd>
+			</dl>
+HTML;
 }
 else if(isset($_POST["etudiant"]) && !empty($_POST["etudiant"]) && $_POST["etudiant"]=="none"){
 	$html.="<h4 class='h4'>Vous devez selectionner un étudiant!</h4>";
