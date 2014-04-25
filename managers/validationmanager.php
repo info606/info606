@@ -189,6 +189,53 @@ SQL
 		return $tab;
 	}
 
+	public function recupererParNumEtudiantTrieParDate($num)
+	{
+		$q = $this->_myPDO->prepare(<<<SQL
+			SELECT count(*) AS "nb"
+			FROM Validation
+			WHERE numEtudiant=:id
+			ORDER BY dateValidation
+SQL
+		);
+
+		$q->bindValue(":id", $num);
+		$q->execute();
+
+		$data = $q->fetch(PDO::FETCH_ASSOC);
+		//if($data['nb'] == 0)
+		//	throw new Exception("Il n'existe aucune validation avec le numéro $num.");
+
+		$q = $this->_myPDO->prepare(<<<SQL
+			SELECT *
+			FROM Validation
+			WHERE numEtudiant=:id
+			ORDER BY DATE_FORMAT(Validation.dateValidation,'%Y-%m-%d') ASC
+SQL
+		);
+
+		$q->bindValue(":id", $num);
+		$q->execute();
+
+		$tab[] = array();
+
+		while($res = $q->fetch(PDO::FETCH_ASSOC)){
+			$v = new Validation();
+
+			$v->idValidation = $res['IDVALIDATION'];
+			$v->numEnseignant = $res['NUMENSEIGNANT'];
+			$v->numEtudiant = $res['NUMETUDIANT'];
+			$v->idEpreuve = $res['IDEPREUVE'];
+			$v->dateValidation = $res['DATEVALIDATION'];
+			$v->valeurValidation = $res['VALEURVALIDATION'];
+
+			$tab[] = $v;
+		}
+		
+
+		return $tab;
+	}
+
 	public function recupererTout()
 	{
 		$q = $this->_myPDO->query(<<<SQL
