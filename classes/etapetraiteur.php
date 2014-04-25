@@ -49,18 +49,52 @@ class EtapeTraiteur extends Traiteur
 		$indexLibLEtape = $this->csvLoader->getIndexTitle(array("Version","lib", "web"));
 
 		$data = $this->csvLoader->getData();
+		$importErr = "Impossible d'importer la ligne : ";
 		foreach ($data as $ligne) {
 
-			if(!array_key_exists($indexCodComp, $ligne) ||
-				!array_key_exists($indexLibComp, $ligne) ||
-				!array_key_exists($indexCodCursus, $ligne) ||
-				!array_key_exists($indexLibCursus, $ligne) ||
-				!array_key_exists($indexNiveau, $ligne) ||
-				!array_key_exists($indexCodEtape, $ligne) ||
-				!array_key_exists($indexLibCEtape, $ligne) ||
-				!array_key_exists($indexVersEtape, $ligne) ||
-				!array_key_exists($indexLibLEtape, $ligne))
+			if(!array_key_exists($indexCodComp, $ligne))
 			{
+				$_SESSION['erreurs'][] = $importErr."il manque le code de la composante.";
+				continue;
+			}
+			if(!array_key_exists($indexLibComp, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le libellé de la composante.";
+				continue;
+			}
+			if(!array_key_exists($indexCodCursus, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le code du cursus.";
+				continue;
+			}
+			if(!array_key_exists($indexLibCursus, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le libellé du cursus.";
+				continue;
+			}
+			if(!array_key_exists($indexNiveau, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le niveau dans le dîplome.";
+				continue;
+			}
+			if(!array_key_exists($indexCodEtape, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le code de l'étape.";
+				continue;
+			}
+			if(!array_key_exists($indexLibCEtape, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le libellé court de l'étape.";
+				continue;
+			}
+			if(!array_key_exists($indexVersEtape, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque la version de l'étape.";
+				continue;
+			}
+			if(!array_key_exists($indexLibLEtape, $lign)
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le libellé long de l'étape.";
 				continue;
 			}
 
