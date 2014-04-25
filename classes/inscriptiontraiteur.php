@@ -12,8 +12,26 @@ class InscriptionTraiteur extends Traiteur
 	private $validationM;
 	private $epreuveM;
 	private $etapeM;
+	private $cursusM;
 	private $epreuvesLib = array("D1P", "D1T", "D2P", "D2T", "D3P", "D3T", "D4P", "D4T", "D5P", "D5T",);
-	private $titres = array("Code Etudiant","Nom", "prénom", "login", "mail", "date de naissance","Composante (code)", "composante (lib.)", "Etape (code)", "IAE (date)");
+	private $titres = array("Code Etudiant",
+							"Nom",
+							"prénom", 
+							"login", 
+							"mail", 
+							"date de naissance",
+							"Composante (code)", 
+							"composante (lib.)", 
+							"Etape (code)",
+							"Etape (version)",
+							"IAE (date)",
+							"Etape (version)",
+							"cursus (code)",
+							"niveau",
+							"Date IA C2i",
+							"régime (code)",
+							"régime (lib.)"
+							);
 	
 	public function __construct()
 	{
@@ -25,12 +43,14 @@ class InscriptionTraiteur extends Traiteur
 		$validationC = new ValidationControleur();
 		$epreuveC = new EpreuveControleur();
 		$etapeC = new EtapeControleur();
+		$cursusC = new CursusControleur();
 
 		$this->composanteM = $composanteC->composanteManager;
 		$this->etudiantM = $etudiantC->etudiantManager;
 		$this->validationM = $validationC->validationManager;
 		$this->epreuveM = $epreuveC->epreuveManager;
 		$this->etapeM = $etapeC->etapeManager;
+		$this->cursusM = $cursusC->cursusManager;
 	}
 
 	public function traiter($filename, $definitif=false)
@@ -47,6 +67,9 @@ class InscriptionTraiteur extends Traiteur
 		$indexCodComp = $this->csvLoader->getIndexTitle(array("composante","code"));
 		$indexLibComp = $this->csvLoader->getIndexTitle(array("composante","lib"));
 		$indexCodEtape = $this->csvLoader->getIndexTitle(array("etape","code"));
+		$indexVersionEtape = $this->csvLoader->getIndexTitle(array("etape","version"));
+		$indexCodCursus = $this->csvLoader->getIndexTitle(array("cursus","code"));
+		$indexNiveau = $this->csvLoader->getIndexTitle(array("niveau"));
 		$indexNumEtud = $this->csvLoader->getIndexTitle(array("etudiant","code"));
 		$indexNomEtud = $this->csvLoader->getIndexTitle(array("individu","nom")); /* Attention, il faut que la colonne nom soit avant la colonne prénom */
 		$indexPrenomEtud = $this->csvLoader->getIndexTitle(array("prénom"));
@@ -56,11 +79,95 @@ class InscriptionTraiteur extends Traiteur
 		$indexDateIAE = $this->csvLoader->getIndexTitle(array("date","iae"));
 		$indexDateC2I = $this->csvLoader->getIndexTitle(array("date","C2i"));
 		$indexNumRegime = $this->csvLoader->getIndexTitle(array("régime", "code"));
-		$indexNumRegime = $this->csvLoader->getIndexTitle(array("régime", "code"));
+		$indexLibRegime = $this->csvLoader->getIndexTitle(array("régime", "lib"));
 
 		$data = $this->csvLoader->getData();
+		
 		foreach ($data as $ligne) {
+			$importErr = "Impossible d'importer la ligne : ";
 			/* Récupérer Composante */
+			if(!array_key_exists($indexNumEtud, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le numéro de l'étudiant.";
+				continue;
+			}
+			$importErr .= "Etudiant n°".$ligne[$indexNumEtud]." : ";
+			if(!array_key_exists($indexCodComp, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le code de la composante.";
+				continue;
+			}
+			if(!array_key_exists($indexLibComp, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le libellé de la composante.";
+				continue;
+			}
+			if(!array_key_exists($indexCodEtape, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le code de l'étape.";
+				continue;
+			}
+			if(!array_key_exists($indexNomEtud, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le nom de l'étudiant.";
+				continue;
+			}
+			if(!array_key_exists($indexPrenomEtud, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le prénom de l'étudiant.";
+				continue;
+			}
+			if(!array_key_exists($indexLoginEtud, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le login de l'étudiant.";
+				continue;
+			}
+			if(!array_key_exists($indexMailEtud, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le mail de l'étudiant.";
+				continue;
+			}
+			if(!array_key_exists($indexDateNais, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque la date de naissance de l'étudiant.";
+				continue;
+			}
+			if(!array_key_exists($indexDateIAE, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque la date d'inscription administrative.";
+				continue;
+			}
+			if(!array_key_exists($indexDateC2I, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque la date d'inscription au C2i.";
+				continue;
+			}
+			if(!array_key_exists($indexNumRegime, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le code de régime.";
+				continue;
+			}
+			if(!array_key_exists($indexLibRegime, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le libellé du régime.";
+				continue;
+			}
+			if(!array_key_exists($indexCodCursus, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le code du cursus.";
+				continue;
+			}
+			if(!array_key_exists($indexNiveau, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque le niveau dans le diplôme.";
+				continue;
+			}
+			if(!array_key_exists($indexVersionEtape, $ligne))
+			{
+				$_SESSION['erreurs'][] = $importErr."il manque la version de l'étape.";
+				continue;
+			}
+
 			$composante = new Composante();
 			$composante->codeComposante = $ligne[$indexCodComp];
 			$composante->libComposante = $ligne[$indexLibComp];
@@ -75,10 +182,26 @@ class InscriptionTraiteur extends Traiteur
 				continue;
 			}
 
+			/* Récupérer Cursus */
+			$cursus = new Cursus();
+			$cursus->codeCursus = $ligne[$indexCodCursus];
+			$cursus->niveau = $ligne[$indexNiveau];
+			try{
+				$cursus->idCursus = $this->cursusM->recupererNum($cursus);
+			}
+			catch(Exception $e)
+			{
+				$_SESSION['erreurs'][] = "Il n'existe aucun cursus correspondant pour l'étudiant : ".$ligne[$indexNumEtud]." - Code cursus: ".$cursus->codeCursus." - Composante : ".$composante->libComposante;
+				continue;
+			}
+
 			/* Récupérer Etape */
 			$etape = new Etape();
 			$etape->codeEtape = $ligne[$indexCodEtape];
 			$etape->numComposante = $composante->numComposante;
+			$etape->versionEtape = $ligne[$indexVersionEtape];
+			$etape->idCursus = $cursus->idCursus;
+			var_dump($etape);
 			try{
 				$etape->idEtape = $this->etapeM->recupererNum($etape);
 			}
