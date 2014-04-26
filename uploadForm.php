@@ -32,6 +32,24 @@ $formu = <<<HTML
 				$menu
 				<div id="page" class="col-md-7 col-md-offset-1">
 					<h2 class="h2">Importer des données</h2>
+HTML;
+if(count($_SESSION['erreurs']) > 0)
+{
+	$formu .= <<<HTML
+		<fieldset>
+			<legend>Erreurs</legend>
+			<ul>
+HTML;
+	foreach ($_SESSION['erreurs'] as $value) {
+		$formu .= "<li>".$value."</li>";	
+	}
+$formu .= <<<HTML
+			</ul>
+		</fieldset>
+HTML;
+}
+
+$formu .= <<<HTML
 					<form method="POST" action="upload.php" enctype="multipart/form-data">
 						<fieldset>
 							<legend>Fichier</legend>

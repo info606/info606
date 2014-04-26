@@ -14,6 +14,18 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 	/* On vide les erreurs */
 	$_SESSION["erreurs"] = array();
 
+echo <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.css">
+		<link type="text/css" rel="stylesheet" href="css/style.css">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>c2i-1</title>
+	</head>
+	<body class="container-fluid">
+HTML;
+
 	$compControleur = new ComposanteControleur();
 	$composante = "composante";//$compControleur->composanteManager->recupererParNum($_SESSION["numComposante"]);
 	$dossier = "donnees/".$_POST["type"]."/";
@@ -53,5 +65,13 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 		$_SESSION['erreurs'][] = "Impossible d'uploader le fichier.";
 	}
 
-	header('Location: uploadForm.php');
+
+echo <<<HTML
+	</body>
+</html>
+HTML;
+}
+else
+{
+	echo "Haha";
 }

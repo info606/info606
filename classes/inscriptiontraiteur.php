@@ -58,10 +58,10 @@ class InscriptionTraiteur extends Traiteur
 		try{
 			$this->csvLoader = new CSVLoader($this->path.$filename, $this->titres, ";");
 		}
-		catch(Expression $e)
+		catch(Exception $e)
 		{
 			$_SESSION['erreurs'][] = $e->getMessage();
-			exit();
+			return;
 		}
 
 		$indexCodComp = $this->csvLoader->getIndexTitle(array("composante","code"));
@@ -201,7 +201,7 @@ class InscriptionTraiteur extends Traiteur
 			$etape->numComposante = $composante->numComposante;
 			$etape->versionEtape = $ligne[$indexVersionEtape];
 			$etape->idCursus = $cursus->idCursus;
-			var_dump($etape);
+
 			try{
 				$etape->idEtape = $this->etapeM->recupererNum($etape);
 			}

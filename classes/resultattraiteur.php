@@ -34,10 +34,10 @@ class ResultatTraiteur extends Traiteur
 		try{
 			$this->csvLoader = new CSVLoader($this->path.$filename, array_merge($this->titres,$this->epreuvesLib), ";");
 		}
-		catch(Expression $e)
+		catch(Exception $e)
 		{
 			$_SESSION['erreurs'][] = $e->getMessage();
-			exit();
+			return;
 		}
 
 		$c = new Composante();
