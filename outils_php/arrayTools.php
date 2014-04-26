@@ -4,7 +4,7 @@ require_once('stringTools.php');
 
 function emptyFilter($var)
 {
-    return (!empty($var));
+    return ($var==0 || !empty($var));
 }
 
 function emptyArrayFilter($var)
