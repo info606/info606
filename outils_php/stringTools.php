@@ -26,27 +26,23 @@ function minusculesSansAccents($texte)
     return $texte;        
 }
 
-/* Format dd/mm/yyyy vers yyyy-mm-dd */
-function dateToMySQL($date)
+function loginFromFilename($filename)
 {
-    $temp = explode("/", $date); /* 0=> jour, 1=> mois, 2=> année */
-    $jour = sprintf("%02d", $temp[0]);
-    $mois = sprintf("%02d", $temp[1]);
-    $annee = sprintf("%04d", $temp[2]);
+    $temp = explode("_", $filename);
 
-    $res = $annee.'-'.$mois.'-'.$jour;
-
-    return $res;
+    return $temp[2];
 }
 
-function dateToPassword($date)
+function composanteFromFilename($filename)
 {
-    $temp = explode("/", $date); /* 0=> jour, 1=> mois, 2=> année */
-    $jour = sprintf("%02d", $temp[0]);
-    $mois = sprintf("%02d", $temp[1]);
-    $annee = sprintf("%04d", $temp[2]);
+    $temp = explode("_", $filename);
 
-    $res = $jour.'/'.$mois.'/'.$annee;
+    return $temp[1];
+}
 
-    return $res;
+function yearFromFilename($filename)
+{
+    $temp = explode("_", $filename);
+
+    return $temp[0];
 }

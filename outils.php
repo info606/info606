@@ -22,7 +22,8 @@ function getMenuEnseignant(){
 				<li><a href="moncompte.php">Mon compte</a></li>
 				<li><a href="gestionc2i.php">Gestion du c2i-1</a></li>
 				<li><a href="gestionbase.php">Gestion de la base</a></li>
-				<li><a href="uploadForm.php">Importer des données</a></li><br>
+				<li><a href="uploadForm.php">Importer des données</a></li>
+				<li><a href="supres.php">Supprimer des résultats</a></li><br>
 			</ul>
 		</div>
 HTML;
