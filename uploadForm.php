@@ -48,7 +48,9 @@ $formu .= <<<HTML
 		</fieldset>
 HTML;
 }
-
+$dateDeb = date('Y')-3;
+$dateMax = date('Y')+1;
+$date = date('Y');
 $formu .= <<<HTML
 					<form method="POST" action="upload.php" enctype="multipart/form-data">
 						<fieldset>
@@ -63,6 +65,12 @@ $formu .= <<<HTML
 							<input type="radio" id="etape" name="type" value="etapes"/><label for="etape">Etapes</label>
 							<input type="radio" id="etud" name="type" value="etudiants"/><label for="etud">Etudiants</label>
 						</fieldset>
+						<fieldset>
+							<legend>Date des données (Année scolaire)</legend>
+							<input type="number" name="annee" min="$dateDeb" max="$dateMax" value="$date"/>
+						</fieldset>
+						<fieldset>
+							<legend>Validation</legend>
 HTML;
 if($_SESSION["admin"])
 {
@@ -71,8 +79,6 @@ if($_SESSION["admin"])
 HTML;
 }
 $formu .= <<<HTML
-						<fieldset>
-							<legend>Validation</legend>
 								<input type="submit" value="envoyer"/>
 						<fieldset>
 					</form>

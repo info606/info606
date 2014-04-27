@@ -9,16 +9,22 @@ if(!verifConnexion("enseignant"))
 	header('Location: nonautorise.php'); 
 }
 
-if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
+$dateDeb = date('Y')-3;
+$dateMax = date('Y')+1;
+
+if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]) 
+	&& isset($_POST["annee"]) && !empty($_POST["annee"]) 
+	&& $dateDeb < $_POST["annee"] && $_POST["annee"] < $dateMax)
 {
 	/* On vide les erreurs */
 	$_SESSION["erreurs"] = array();
 
 	$compControleur = new ComposanteControleur();
-	$composante = "composante";//$compControleur->composanteManager->recupererParNum($_SESSION["numComposante"]);
+	$composante = $compControleur->composanteManager->recupererParNum($_SESSION["numComposante"]);
 	$dossier = "donnees/".$_POST["type"]."/";
 
-	$nomFichier = $composante."_".$_SESSION["loginEnseignant"]."_".date("dmY").".csv";
+	$nomFichier = $_POST["annee"]."_".$composante->libComposante."_".$_SESSION["loginEnseignant"]."_".date("dmY").".csv";
+
 	$extension = strrchr($_FILES["fichier"]["name"],'.');
 	if($extension != ".csv")
 	{
@@ -52,6 +58,10 @@ if(isset($_FILES["fichier"]) && isset($_POST["type"]) && !empty($_POST["type"]))
 	{
 		$_SESSION['erreurs'][] = "Impossible d'uploader le fichier.";
 	}
-
-	header('Location: uploadForm.php');
+	var_dump($_SESSION['erreurs']);
 }
+else
+{
+	$_SESSION['erreurs'][] = "Impossible d'uploader le fichier.";
+}
+header('Location: uploadForm.php');
