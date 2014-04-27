@@ -19,7 +19,7 @@ if(verifConnexion("enseignant")){
 		}
 		else if($_POST["action"] == "modifEnseignant"){
 			$enseignantControleur = new EnseignantControleur();
-			$e = new Enseignant($_POST["numEnseignant"],$_POST["nomEnseignant"],$_POST["prenomEnseignant"],$_POST["loginEnseignant"],$_POST["mdpEnseignant"]);
+			$e = new Enseignant($_POST["numEnseignant"],$_POST["nomEnseignant"],$_POST["prenomEnseignant"],$_POST["loginEnseignant"],$_POST["mdpEnseignant"], $_POST['compEnseignant']);
 			$enseignantControleur->enseignantManager->maj($e);
 
 			header('Location: gestionbase.php');
@@ -42,7 +42,7 @@ if(verifConnexion("enseignant")){
 		}
 		else if($_POST["action"] == "creaEnseignant"){
 			$enseignantControleur = new EnseignantControleur();
-			$e = new Enseignant($_POST["numEnseignant"],$_POST["nomEnseignant"],$_POST["prenomEnseignant"],$_POST["loginEnseignant"],$_POST["mdpEnseignant"]);
+			$e = new Enseignant($_POST["numEnseignant"],$_POST["nomEnseignant"],$_POST["prenomEnseignant"],$_POST["loginEnseignant"],$_POST["mdpEnseignant"], $_POST['compEnseignant']);
 			$enseignantControleur->enseignantManager->ajouter($e);
 
 			header('Location: gestionbase.php');

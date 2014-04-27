@@ -166,7 +166,7 @@ HTML;
 		}
 		else if($_GET["type"]==2 && $_GET["action"] == 1){
 			$enseignantControleur = new EnseignantControleur();
-			$e = $enseignantControleur->enseignantManager->recupererParNum($_GET["enseignant"]);
+			$e = $enseignantControleur->enseignantManager->recupererParLogin($_GET["enseignant"]);
 
 			$html.=<<<HTML
 <form action="modifbase.php" method="POST" class="form-horizontal" role="form" onSubmit="this.mdpEnseignant=CryptoJS.SHA1(this.mdpEnseignant)">
@@ -194,6 +194,28 @@ HTML;
 		<label for="inputPassword3" class="col-sm-3 control-label">Mot de passe</label>
 		<div class="col-sm-4">
 			<input name="mdpEnseignant" type="password" class="form-control" id="inputPassword3" placeholder="Mot de passe" value="{$e->mdpEnseignant}">
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="inputComposante3" class="col-sm-3 control-label">Composante</label>
+		<div class="col-sm-4">
+			<select name="compEnseignant" class="form-control" id="inputcomposante3">
+HTML;
+		$composanteControleur = new ComposanteControleur();
+		$composantes = $composanteControleur->composanteManager->recupererTout();
+		foreach ($composantes as $c) {
+			if($_SESSION['numComposante'] != $c->numComposante)
+			{
+				$html.="<option value='{$c->numComposante}'>$c->libComposante</option>";	
+			}
+			else
+			{
+				$html.="<option selected value='{$c->numComposante}'>$c->libComposante</option>";
+			}
+			
+		}
+$html.=<<<HTML
+			</select>
 		</div>
 	</div>
 	<div class="form-group">
@@ -390,6 +412,29 @@ HTML;
 		<label for="inputPassword3" class="col-sm-3 control-label">Mot de passe</label>
 		<div class="col-sm-4">
 			<input name="mdpEnseignant" type="password" class="form-control" id="inputPassword3" placeholder="Mot de passe">
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="inputComposante3" class="col-sm-3 control-label">Composante</label>
+		<div class="col-sm-4">
+			<select name="compEnseignant" class="form-control" id="inputcomposante3">
+HTML;
+		$composanteControleur = new ComposanteControleur();
+		$composantes = $composanteControleur->composanteManager->recupererTout();
+
+		foreach ($composantes as $c) {
+			if($_SESSION['numComposante'] != $c->numComposante)
+			{
+				$html.="<option value='{$c->numComposante}'>$c->libComposante</option>";	
+			}
+			else
+			{
+				$html.="<option selected value='{$c->numComposante}'>$c->libComposante</option>";
+			}
+			
+		}
+$html.=<<<HTML
+			</select>
 		</div>
 	</div>
 	<div class="form-group">

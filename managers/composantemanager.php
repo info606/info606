@@ -145,7 +145,6 @@ SQL
 SQL
 		);
 		$q->execute();
-		$tabComposantes[] = array();
 		while($res = $q->fetch(PDO::FETCH_ASSOC))
 		{
 			$c = new Composante();
@@ -153,7 +152,7 @@ SQL
 			$c->numComposante = $res['NUMCOMPOSANTE'];
 			$c->codeComposante = $res['CODECOMPOSANTE'];
 			$c->libComposante = $res['LIBCOMPOSANTE'];
-
+			
 			$tabComposantes[] = $c; 
 		}
 

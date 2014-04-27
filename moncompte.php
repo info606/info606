@@ -130,6 +130,23 @@ $html = <<<HTML
 						<tr><td>Nom<td><input class="form-control" id="disabledInput" type="text" placeholder="{$_SESSION["nomEnseignant"]}" disabled>
 						<tr><td>Prénom<td><input class="form-control" id="disabledInput" type="text" placeholder="{$_SESSION["prenomEnseignant"]}" disabled>
 						<tr><td>Login<td><input class="form-control" id="disabledInput" type="text" placeholder="{$_SESSION["loginEnseignant"]}" disabled>
+						<tr><td>Composante<td><select disabled name="compEnseignant" class="form-control" id="inputcomposante3">
+HTML;
+		$composanteControleur = new ComposanteControleur();
+		$composantes = $composanteControleur->composanteManager->recupererTout();
+		foreach ($composantes as $c) {
+			if($_SESSION['numComposante'] != $c->numComposante)
+			{
+				$html.="<option value='{$c->numComposante}'>$c->libComposante</option>";	
+			}
+			else
+			{
+				$html.="<option selected value='{$c->numComposante}'>$c->libComposante</option>";
+			}
+			
+		}
+$html.=<<<HTML
+							</select>
 					</table>
 						<br><br>
 					<table>
