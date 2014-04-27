@@ -17,13 +17,14 @@ class ValidationManager
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Validation
-			WHERE idValidation=:id OR (numEtudiant=:numEt AND idEpreuve=:idEp)
+			WHERE idValidation=:id OR (numEtudiant=:numEt AND idEpreuve=:idEp AND anneeValidation=:annee)
 SQL
 		);
 
 		$q->bindValue(":numEt", $v->numEtudiant);
 		$q->bindValue(":idEp", $v->idEpreuve);
 		$q->bindValue(':id', 		$v->idValidation);
+		$q->bindValue(':annee', 		$v->anneeValidation);
 		$q->execute();
 		$data = $q->fetch(PDO::FETCH_ASSOC);
 		if ($data['nb'] != 0)
@@ -39,15 +40,17 @@ SQL
 			throw new Exception("Impossible d'ajouter la validation car le numéro ".$v->idValidation." est déjà utilisé.");
 
 		$q = $this->_myPDO->prepare(<<<SQL
-			INSERT INTO validation(numEnseignant, numEtudiant, idEpreuve, dateValidation, valeurValidation)
-			VALUES (:numEns, :numEt, :idEp, NOW(), :valeurValidation)
+			INSERT INTO validation(numEnseignant, numEtudiant, idEpreuve, dateValidation, valeurValidation, anneeValidation)
+			VALUES (:numEns, :numEt, :idEp, :dateV, :valeurValidation, :annee)
 SQL
 		);
 
 		$q->bindValue(":numEns", 		$v->numEnseignant);
 		$q->bindValue(":numEt", 		$v->numEtudiant);
 		$q->bindValue(":idEp", 		$v->idEpreuve);
+		$q->bindValue(":dateV", 		$v->dateValidation);
 		$q->bindValue(":valeurValidation", $v->valeurValidation);
+		$q->bindValue(':annee', 		$v->anneeValidation);
 
 		$q->execute();
 	}
@@ -72,12 +75,13 @@ SQL
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Validation
-			WHERE numEtudiant=:numEt AND idEpreuve=:idEp
+			WHERE numEtudiant=:numEt AND idEpreuve=:idEp AND anneeValidation=:annee
 SQL
 		);
 
 		$q->bindValue(":numEt", $v->numEtudiant);
 		$q->bindValue(":idEp", $v->idEpreuve);
+		$q->bindValue(':annee', 		$v->anneeValidation);
 		$q->execute();
 
 		$data = $q->fetch(PDO::FETCH_ASSOC);
@@ -89,12 +93,13 @@ SQL
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT idValidation
 			FROM Validation
-			WHERE numEtudiant=:numEt AND idEpreuve=:idEp
+			WHERE numEtudiant=:numEt AND idEpreuve=:idEp AND anneeValidation=:annee
 SQL
 		);
 
 		$q->bindValue(":numEt", $v->numEtudiant);
 		$q->bindValue(":idEp", $v->idEpreuve);
+		$q->bindValue(':annee', 		$v->anneeValidation);
 		$q->execute();
 
 		$res = $q->fetch(PDO::FETCH_ASSOC);
@@ -139,6 +144,7 @@ SQL
 		$v->numEtudiant = $res['NUMETUDIANT'];
 		$v->idEpreuve = $res['IDEPREUVE'];
 		$v->dateValidation = $res['DATEVALIDATION'];
+		$v->anneeValidation = $res['ANNEEVALIDATION'];
 		$v->valeurValidation = $res['VALEURVALIDATION'];
 
 		return $v;
@@ -180,6 +186,7 @@ SQL
 			$v->numEtudiant = $res['NUMETUDIANT'];
 			$v->idEpreuve = $res['IDEPREUVE'];
 			$v->dateValidation = $res['DATEVALIDATION'];
+			$v->anneeValidation = $res['ANNEEVALIDATION'];
 			$v->valeurValidation = $res['VALEURVALIDATION'];
 
 			$tab[] = $v;
@@ -227,6 +234,7 @@ SQL
 			$v->numEtudiant = $res['NUMETUDIANT'];
 			$v->idEpreuve = $res['IDEPREUVE'];
 			$v->dateValidation = $res['DATEVALIDATION'];
+			$v->anneeValidation = $res['ANNEEVALIDATION'];
 			$v->valeurValidation = $res['VALEURVALIDATION'];
 
 			$tab[] = $v;
@@ -255,6 +263,7 @@ SQL
 			$v->numEtudiant = $res['NUMETUDIANT'];
 			$v->idEpreuve = $res['IDEPREUVE'];
 			$v->dateValidation = $res['DATEVALIDATION'];
+			$v->anneeValidation = $res['ANNEEVALIDATION'];
 			$v->valeurValidation = $res['VALEURVALIDATION'];
 
 			$tabValidations[] = $v; 
@@ -271,7 +280,7 @@ SQL
 
 		$q = $this->_myPDO->prepare(<<<SQL
 			UPDATE Validation
-			SET	numEnseignant=:numEns, numEtudiant=:numEt, idEpreuve=:idEp, dateValidation=NOW(), valeurValidation=:valeurValidation
+			SET	numEnseignant=:numEns, numEtudiant=:numEt, idEpreuve=:idEp, dateValidation=:dateV, valeurValidation=:valeurValidation, anneeValidation=:annee
 			WHERE idValidation=:idVal
 SQL
 		);
@@ -280,9 +289,19 @@ SQL
 		$q->bindValue(":numEns", 	$v->numEnseignant);
 		$q->bindValue(":numEt", 	$v->numEtudiant);
 		$q->bindValue(":idEp", 		$v->idEpreuve);
+		$q->bindValue(":dateV", 		$v->dateValidation);
+		$q->bindValue(":annee", 		$v->anneeValidation);
 		$q->bindValue(":valeurValidation", $v->valeurValidation);
 
 		$q->execute();
+	}
+
+	public function viderTable()
+	{
+		$q = $this->_myPDO->prepare(<<<SQL
+			TRUNCATE table Validation
+SQL
+		);
 	}
 
 

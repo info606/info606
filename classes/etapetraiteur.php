@@ -3,6 +3,7 @@
 $rootPath = $_SERVER['DOCUMENT_ROOT'];
 require_once($rootPath."/info606/outils_php/autoload.php");
 require_once($rootPath."/info606/outils_php/arrayTools.php");
+require_once($rootPath."/info606/outils_php/dateTools.php");
 
 class EtapeTraiteur extends Traiteur
 {

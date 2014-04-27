@@ -3,6 +3,8 @@
 $rootPath = $_SERVER['DOCUMENT_ROOT'];
 require_once($rootPath."/info606/outils_php/autoload.php");
 require_once($rootPath."/info606/outils_php/arrayTools.php");
+require_once($rootPath."/info606/outils_php/dateTools.php");
+require_once($rootPath."/info606/outils_php/stringTools.php");
 
 class ResultatTraiteur extends Traiteur
 {
@@ -29,7 +31,7 @@ class ResultatTraiteur extends Traiteur
 		$this->epreuveM = $epreuveC->epreuveManager;
 	}
 
-	public function traiter($filename, $definitif=false)
+	public function traiter($filename,$admin=false)
 	{
 		try{
 			$this->csvLoader = new CSVLoader($this->path.$filename, array_merge($this->titres,$this->epreuvesLib), ";");
@@ -56,10 +58,32 @@ class ResultatTraiteur extends Traiteur
 		$indexD4T = $this->csvLoader->getIndexTitle(array("D4T"));
 		$indexD5T = $this->csvLoader->getIndexTitle(array("D5T"));
 		
+		$definitif = isset($_POST['definitif']);
+		
 		/* Si l'import est définitif, on regarde le résultat */
 		if($definitif)
 		{
+
 			$indexResultat = $this->csvLoader->getIndexTitle(array("resultat"));
+			/* On supprimer les fichiers de la même année */
+			$files = scandir($this->path, SCANDIR_SORT_NONE);
+			foreach ($files as $key => $value) {
+				if(is_file($this->path.$value) && $filename != $value)
+				{
+					$annee = yearFromFilename($value);
+					if($annee == $_POST['annee'])
+					{
+						if(!unlink($this->path.$value))
+						{
+							$_SESSION['erreurs'][] = "Impossible de supprimer le fichier ".$value;
+						}
+						else
+						{
+							echo "supprimé";
+						}
+					}
+				}
+			}
 		}
 
 		foreach ($data as $ligne) {
@@ -85,10 +109,19 @@ class ResultatTraiteur extends Traiteur
 				$_SESSION['erreurs'][] = $e->getMessage();
 				continue;
 			}
+
+			if($definitif)
+			{
+				$et->C2IValide = $ligne[$indexResultat]=='ADM'?1:0;
+				$this->etudiantM->maj($et);
+			}
+
 			foreach ($this->epreuvesLib as $lib) {
 				$v = new Validation();
 				$v->numEnseignant = $_SESSION["numEnseignant"];
 				$v->numEtudiant = $et->numEtudiant;
+				$v->dateValidation = dateToMySQL(dateFromFilename($filename));
+				$v->anneeValidation = yearFromFilename($filename);
 
 				$e = new Epreuve();
 				$e->numComposante = $numComp;
@@ -102,7 +135,7 @@ class ResultatTraiteur extends Traiteur
 				{
 					$v->valeurValidation = $ligne[$index];
 					try{
-						$this->majValidation($v, $_SESSION['admin']);
+						$this->majValidation($v, $admin?true:$_SESSION['admin']);
 					}
 					catch(Exception $e)
 					{
@@ -153,6 +186,7 @@ class ResultatTraiteur extends Traiteur
 		}
 		else
 		{
+			$this->validationM->viderTable();
 			$this->maj();
 		}
 	}
@@ -168,13 +202,11 @@ class ResultatTraiteur extends Traiteur
 				unset($files[$key]);
 			}
 		}
-		var_dump($files);
 		/* Les trier par ordre chronologique */
 		usort($files,'arrayDateSort');
-		var_dump($files);
 		/* Les traiter un par un */
 		foreach ($files as $value) {
-			$this->traiter($value);
+			$this->traiter($value,true);
 		}
 	}
 

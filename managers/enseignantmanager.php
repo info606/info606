@@ -116,11 +116,11 @@ SQL
 		$q = $this->_myPDO->prepare(<<<SQL
 			SELECT count(*) AS "nb"
 			FROM Enseignant
-			WHERE loginEnseignant=:num
+			WHERE loginEnseignant=:login
 SQL
 		);
 
-		$q->bindValue(":num", $num);
+		$q->bindValue(":login", $num);
 		$q->execute();
 
 		$data = $q->fetch(PDO::FETCH_ASSOC);

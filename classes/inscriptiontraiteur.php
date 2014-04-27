@@ -4,6 +4,7 @@ $rootPath = $_SERVER['DOCUMENT_ROOT'];
 require_once($rootPath."/info606/outils_php/autoload.php");
 require_once($rootPath."/info606/outils_php/arrayTools.php");
 require_once($rootPath."/info606/outils_php/stringTools.php");
+require_once($rootPath."/info606/outils_php/dateTools.php");
 
 class InscriptionTraiteur extends Traiteur
 {
@@ -245,40 +246,7 @@ class InscriptionTraiteur extends Traiteur
 				/* Insérer Epreuve pour la composante */
 				$this->epreuveM->ajouter($epreuve);
 				$epreuve->idEpreuve = $this->epreuveM->recupererNum($epreuve);
-				
-				/* Insérer Validation à -1 pour l'étudiant et pour chaque épreuve de la composante */
-				$validation = new Validation();
-				$validation->numEnseignant = $_SESSION['numEnseignant'];
-				$validation->numEtudiant = $etudiant->numEtudiant;
-				$validation->idEpreuve = $epreuve->idEpreuve;
-				$validation->valeurValidation = -1;
-				$this->majValidation($validation, $_SESSION['admin']);
 			}
-		}
-	}
-
-	private function majValidation($validation, $admin)
-	{
-		if($this->validationM->exists($validation))
-		{
-			$idValid = $this->validationM->recupererNum($validation);
-			/* On récupère l'ancienne valeur de la validation */
-			$vRecup = $this->validationM->recupererParNum($idValid);
-
-			/* Cas où la valeur rétrograderait */
-			if($vRecup->valeurValidation > $validation->valeurValidation && !$admin)
-			{
-				throw new Exception("Vous n'avez pas les droits nécessaires pour rétrograder une validation");
-			}
-			else
-			{
-				$validation->idValidation = $idValid;
-				$this->validationM->maj($validation);
-			}
-		}
-		else
-		{
-			$this->validationM->ajouter($validation);
 		}
 	}
 

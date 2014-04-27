@@ -11,6 +11,7 @@ class Validation
     private $numEtudiant; /* Clé étrangère */
     private $idEpreuve; /* Clé étrangère */
     private $dateValidation;
+    private $anneeValidation;
     private $valeurValidation;
 
 	public function __construct($date="", $numEnseignant="", $numEtudiant="", $idEpreuve="", $valeur = -1)
