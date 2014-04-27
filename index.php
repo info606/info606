@@ -3,6 +3,8 @@ session_start();
 require_once("/outils_php/autoload.php");
 require_once("outils.php");
 
+// Mémorisation d'un challenge dans la session
+$_SESSION['challenge'] = codeAleatoire(16) ;
 $menu = getMenuEtudiant();
 $menu2 = getMenuEnseignant();
 
@@ -79,6 +81,17 @@ $html = <<<HTML
 		<link type="text/css" rel="stylesheet" href="css/style.css">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title>c2i-1</title>
+		<script type='text/javascript' src='http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js'></script>
+		<script type='text/javascript'>
+		function crypter(f, challenge) {
+		    if (f.login.value.length && f.cod.value.length) {
+		        f.password.value = CryptoJS.SHA1(CryptoJS.SHA1(f.cod.value)+challenge+CryptoJS.SHA1(f.login.value)) ;
+		        f.login.value = f.cod.value = '' ;
+		        return true ;
+		    }
+		    return false ;
+		}
+		</script>
 	</head>
 	<body class="container-fluid">
 		<div id="bandeau" class="row">
@@ -102,7 +115,7 @@ HTML;
 
 $html .= <<<HTML
 			<br><br>
-			<form class="form-horizontal" role="form" name="formulaire" action="connexion.php" method="POST">
+			<form class="form-horizontal" role="form" name="formulaire" action="connexion.php" method="POST" onsubmit="return crypter(this, '{$_SESSION['challenge']}')">
 				<div class="form-group">
 					<label for="inputEmail3" class="col-sm-2 control-label">Login</label>
 					<div class="col-sm-10">
@@ -112,7 +125,8 @@ $html .= <<<HTML
 				<div class="form-group">
 					<label for="inputPassword3" class="col-sm-2 control-label">Mot de passe</label>
 					<div class="col-sm-10">
-						<input name="password" style="width: 50%;" type="password" class="form-control" id="inputPassword3" placeholder="Mot de passe">
+						<input name="cod" style="width: 50%;" type="password" class="form-control" id="inputPassword3" placeholder="Mot de passe">
+						<input type="hidden" name="password">
 					</div>
 				</div>
 				<div class="form-group">

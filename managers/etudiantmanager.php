@@ -260,5 +260,38 @@ SQL
 		$q->execute();
 	}
 
+public function recuperationSHA1($code  /** Code contenant un condensat du mot de passe */) {
+        // Préparation de la requête
+        $stmt = $this->_myPDO->prepare(<<<SQL
+    SELECT *
+    FROM Etudiant
+    WHERE SHA1(CONCAT(mdpEtudiant, :challenge, SHA1(loginEtudiant))) = :code
+SQL
+                ) ;
 
+        $stmt->execute(array(
+            ':challenge' => isset($_SESSION['challenge']) ? $_SESSION['challenge'] : '',
+            ':code'      => $code)) ;
+        // Test de réussite de la sélection
+        $e = new Etudiant();
+        if (($res = $stmt->fetch()) !== false) {
+            // Chargement des données
+            $e->numEtudiant = $res['NUMETUDIANT'];
+			$e->nomEtudiant = $res['NOMETUDIANT'];
+			$e->prenomEtudiant = $res['PRENOMETUDIANT'];
+			$e->mailEtudiant = $res['MAILETUDIANT'];
+			$e->dateNaisEtudiant = $res['DATENAISETUDIANT'];
+			$e->loginEtudiant = $res['LOGINETUDIANT'];
+			$e->mdpEtudiant = $res['MDPETUDIANT'];
+			$e->dateIAEEtudiant = $res['DATEIAEETUDIANT'];
+			$e->dateIAC2IEtudiant = $res['DATEIAC2IETUDIANT'];
+			$e->numRegime = $res['NUMREGIME'];
+			$e->idEtape = $res['IDETAPE'];
+			$e->C2IValide = $res['C2IVALIDE'];
+        }
+        else {
+            throw new Exception("Login/pass incorrect") ;
+        }
+        return $e;
+    }	
 }

@@ -225,7 +225,7 @@ class InscriptionTraiteur extends Traiteur
 			$etudiant->C2IValide = 0;
 			$etudiant->numRegime = $ligne[$indexNumRegime];
 			$etudiant->idEtape = $etape->idEtape;
-			$etudiant->mdpEtudiant = dateToPassword($ligne[$indexDateNais]);
+			$etudiant->mdpEtudiant = sha1(dateToPassword($ligne[$indexDateNais]));
 			/* Insérer Etudiant */
 			if($this->etudiantM->exists($etudiant))
 			{

@@ -16,6 +16,7 @@ if(verifConnexion("enseignant")){
 		<link type="text/css" rel="stylesheet" href="css/style.css">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title>Gestion de la base du c2i-1</title>
+		<script type='text/javascript' src='http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js'></script>
 	</head>
 	<body class="container-fluid">
 		<br>
@@ -46,7 +47,7 @@ if(isset($_GET['type']) && !empty($_GET['type'])){
 			$datec2i = dateUS2FR($e->dateIAC2IEtudiant);
 
 $html.=<<<HTML
-<form action="modifbase.php" method="POST" class="form-horizontal" role="form">
+<form action="modifbase.php" method="POST" class="form-horizontal" role="form" onSubmit="this.mdpEtudiant=CryptoJS.SHA1(this.mdpEtudiant)">
 	<input type="hidden" name="action" value="modifEtudiant">
 	<input type="hidden" name="numEtudiant" value="{$e->numEtudiant}">
 	<div class="form-group">
@@ -158,7 +159,7 @@ HTML;
 			// Réinitialisation du mot de passe
 			$etudiantControleur = new EtudiantControleur();
 			$etudiant = $etudiantControleur->etudiantManager->recupererParNum($_GET["etudiant"]);
-			$etudiant->mdpEtudiant = dateUS2FR($etudiant->dateNaisEtudiant);
+			$etudiant->mdpEtudiant = sha1(dateUS2FR($etudiant->dateNaisEtudiant));
 			$etudiantControleur->etudiantManager->maj($etudiant);
 
 			$html.="<h4 class='h4'>Réinitialisation du mot de passe réussie.</h4>";
@@ -168,7 +169,7 @@ HTML;
 			$e = $enseignantControleur->enseignantManager->recupererParNum($_GET["enseignant"]);
 
 			$html.=<<<HTML
-<form action="modifbase.php" method="POST" class="form-horizontal" role="form">
+<form action="modifbase.php" method="POST" class="form-horizontal" role="form" onSubmit="this.mdpEnseignant=CryptoJS.SHA1(this.mdpEnseignant)">
 	<input type="hidden" name="action" value="modifEnseignant">
 	<input type="hidden" name="numEnseignant" value="{$e->numEnseignant}">
 	<div class="form-group">
@@ -365,7 +366,7 @@ HTML;
 		else if($_GET["type"]==2 && $_GET["action"] == 3){
 			/* Création d'un enseignant*/
 			$html.=<<<HTML
-<form action="modifbase.php" method="POST" class="form-horizontal" role="form">
+<form action="modifbase.php" method="POST" class="form-horizontal" role="form" onSubmit="this.mdpEnseignant=CryptoJS.SHA1(this.mdpEnseignant)">
 	<input type="hidden" name="action" value="creaEnseignant">
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Nom</label>

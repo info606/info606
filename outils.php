@@ -64,4 +64,23 @@ function dateUS2FR($date)
   return $date;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+    /// Production d'un code aléatoire (minuscule, majuscule et chiffre)
+function codeAleatoire($taille /** Taille de la chaîne aléatoire */) {
+    $c = '' ;
+    for ($i=0; $i<$taille; $i++) {
+        switch (rand(0, 2)) {
+            case 0 :
+                $c .= chr(rand(ord('A'), ord('Z'))) ;
+                break ;
+            case 1 :
+                $c .= chr(rand(ord('a'), ord('z'))) ;
+                break ;
+            case 2 :
+                $c .= chr(rand(ord('1'), ord('9'))) ;
+                break ;
+        }
+    }
+    return $c ;
+}
 ?>

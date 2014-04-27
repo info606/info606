@@ -16,12 +16,12 @@ if(verifConnexion("all")){
 if(isset($_POST["oldpwd"]) && isset($_POST["newpwd"]) && isset($_POST["newpwd2"])){
 	$controleurEtu = new EtudiantControleur();
 	$etudiant = $controleurEtu->etudiantManager->recupererParNum($_SESSION["numEtudiant"]);
-	if($etudiant->mdpEtudiant === $_POST["oldpwd"] && $_POST["newpwd"] === $_POST["newpwd2"]){
-		$etudiant->mdpEtudiant=$_POST["newpwd"];
+	if($etudiant->mdpEtudiant === sha1($_POST["oldpwd"]) && $_POST["newpwd"] === $_POST["newpwd2"]){
+		$etudiant->mdpEtudiant=sha1($_POST["newpwd"]);
 		$controleurEtu->etudiantManager->maj($etudiant);
 		$message="Modification bien prise en compte.";
 	}
-	else if($etudiant->mdpEtudiant != $_POST["oldpwd"]){
+	else if($etudiant->mdpEtudiant != sha1($_POST["oldpwd"])){
 		$message="L'ancien mot de passe ne concorde pas!";
 	}
 	else{
@@ -89,12 +89,12 @@ echo $html;
 if(isset($_POST["oldpwd"]) && isset($_POST["newpwd"]) && isset($_POST["newpwd2"])){
 	$controleurEns = new EnseignantControleur();
 	$ens = $controleurEns->enseignantManager->recupererParNum($_SESSION["numEnseignant"]);
-	if($ens->mdpEnseignant === $_POST["oldpwd"] && $_POST["newpwd"] === $_POST["newpwd2"]){
-		$ens->mdpEnseignant=$_POST["newpwd"];
+	if($ens->mdpEnseignant === sha1($_POST["oldpwd"]) && $_POST["newpwd"] === $_POST["newpwd2"]){
+		$ens->mdpEnseignant=sha1($_POST["newpwd"]);
 		$controleurEns->enseignantManager->maj($ens);
 		$message="Modification bien prise en compte.";
 	}
-	else if($ens->mdpEnseignant != $_POST["oldpwd"]){
+	else if($ens->mdpEnseignant != sha1($_POST["oldpwd"])){
 		$message="L'ancien mot de passe ne concorde pas!";
 	}
 	else{

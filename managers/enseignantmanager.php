@@ -208,5 +208,32 @@ SQL
 		$q->execute();
 	}
 
+    public function recuperationSHA1($code  /** Code contenant un condensat du mot de passe */) {
+        // Préparation de la requête
+        $stmt = $this->_myPDO->prepare(<<<SQL
+    SELECT *
+    FROM Enseignant e
+    WHERE SHA1(CONCAT(mdpEnseignant, :challenge, SHA1(loginEnseignant))) = :code
+SQL
+                ) ;
 
+        $stmt->execute(array(
+            ':challenge' => isset($_SESSION['challenge']) ? $_SESSION['challenge'] : '',
+            ':code'      => $code)) ;
+        // Test de réussite de la sélection
+        $enseignant = new Enseignant();
+        if (($res = $stmt->fetch()) !== false) {
+            // Chargement des données
+            $enseignant->numEnseignant = $res['NUMENSEIGNANT'];
+			$enseignant->nomEnseignant = $res['NOMENSEIGNANT'];
+			$enseignant->prenomEnseignant = $res['PRENOMENSEIGNANT'];
+			$enseignant->loginEnseignant = $res['LOGINENSEIGNANT'];
+			$enseignant->numComposante = $res['NUMCOMPOSANTE'];
+			$enseignant->admin = $res['ADMIN'];
+        }
+        else {
+            throw new Exception("Login/pass incorrect") ;
+        }
+        return $enseignant;
+    }
 }
