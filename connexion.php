@@ -27,14 +27,18 @@ else{
 			header('Location: index.php?msg=unknown'); 
 		}
 
-		$_SESSION["typePersonne"]="enseignant";
-		$_SESSION["numEnseignant"]=$ensRecup->numEnseignant;
-		$_SESSION["nomEnseignant"]=$ensRecup->nomEnseignant;
-		$_SESSION["prenomEnseignant"]=$ensRecup->prenomEnseignant;
-		$_SESSION["loginEnseignant"]=$ensRecup->loginEnseignant;
-		$_SESSION["numComposante"]=$ensRecup->numComposante;
-		$_SESSION["admin"] = ($ensRecup->admin==1)?true:false;
-		$_SESSION["erreurs"]=array();
+		if($ensRecup == NULL)
+			header('Location: index.php?msg=unknown'); 
+		else{
+			$_SESSION["typePersonne"]="enseignant";
+			$_SESSION["numEnseignant"]=$ensRecup->numEnseignant;
+			$_SESSION["nomEnseignant"]=$ensRecup->nomEnseignant;
+			$_SESSION["prenomEnseignant"]=$ensRecup->prenomEnseignant;
+			$_SESSION["loginEnseignant"]=$ensRecup->loginEnseignant;
+			$_SESSION["numComposante"]=$ensRecup->numComposante;
+			$_SESSION["admin"] = ($ensRecup->admin==1)?true:false;
+			$_SESSION["erreurs"]=array();
+		}
 
 $html = <<<HTML
 <!DOCTYPE html>
@@ -71,18 +75,24 @@ HTML;
 			header('Location: index.php?msg=unknown'); 
 		}
 
-		$_SESSION["typePersonne"]="etudiant";
-		$_SESSION["numEtudiant"]=$etudiantRecup->numEtudiant;
-		$_SESSION["nomEtudiant"]=$etudiantRecup->nomEtudiant;
-		$_SESSION["prenomEtudiant"]=$etudiantRecup->prenomEtudiant;
-		$_SESSION["mailEtudiant"]=$etudiantRecup->mailEtudiant;
-		$_SESSION["dateNaisEtudiant"]=dateUS2FR($etudiantRecup->dateNaisEtudiant);
-		$_SESSION["loginEtudiant"]=$etudiantRecup->loginEtudiant;
-		$_SESSION["dateIAEEtudiant"]=dateUS2FR($etudiantRecup->dateIAEEtudiant);
-		$_SESSION["dateIAC2IEtudiant"]=dateUS2FR($etudiantRecup->dateIAC2IEtudiant);
-		$_SESSION["numRegime"]=$etudiantRecup->numRegime;
-		$_SESSION["idEtape"]=$etudiantRecup->idEtape;
-		$_SESSION["C2IValide"]=$etudiantRecup->C2IValide;
+		if($etudiantRecup == NULL)
+			header('Location: index.php?msg=unknown');
+		else{
+			$_SESSION["typePersonne"]="etudiant";
+			$_SESSION["numEtudiant"]=$etudiantRecup->numEtudiant;
+			$_SESSION["nomEtudiant"]=$etudiantRecup->nomEtudiant;
+			$_SESSION["prenomEtudiant"]=$etudiantRecup->prenomEtudiant;
+			$_SESSION["mailEtudiant"]=$etudiantRecup->mailEtudiant;
+			$_SESSION["dateNaisEtudiant"]=dateUS2FR($etudiantRecup->dateNaisEtudiant);
+			$_SESSION["loginEtudiant"]=$etudiantRecup->loginEtudiant;
+			$_SESSION["dateIAEEtudiant"]=dateUS2FR($etudiantRecup->dateIAEEtudiant);
+			$_SESSION["dateIAC2IEtudiant"]=dateUS2FR($etudiantRecup->dateIAC2IEtudiant);
+			$_SESSION["numRegime"]=$etudiantRecup->numRegime;
+			$_SESSION["idEtape"]=$etudiantRecup->idEtape;
+			$_SESSION["C2IValide"]=$etudiantRecup->C2IValide;
+		}
+
+		
 
 $html = <<<HTML
 <!DOCTYPE html>

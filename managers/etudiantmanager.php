@@ -290,7 +290,8 @@ SQL
 			$e->C2IValide = $res['C2IVALIDE'];
         }
         else {
-            throw new Exception("Login/pass incorrect") ;
+            //throw new Exception("Login/pass incorrect") ;
+            return NULL;
         }
         return $e;
     }	

@@ -232,7 +232,8 @@ SQL
 			$enseignant->admin = $res['ADMIN'];
         }
         else {
-            throw new Exception("Login/pass incorrect") ;
+            //throw new Exception("Login/pass incorrect") ;
+            return NULL;
         }
         return $enseignant;
     }
