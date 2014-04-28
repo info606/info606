@@ -72,10 +72,10 @@ if((isset($_POST["etudiant"]) && !empty($_POST["etudiant"]) && $_POST["etudiant"
 
 	$k=2;
 	for($i=1;$i<count($tabValidation);$i++){
-		$anneeCoup = substr($tabValidation[$i]->dateValidation,0,4);
-		if($anneeCoup != $annee){
-			$annee = $anneeCoup;
-			$tab[$k]=array($anneeCoup);
+		$date = $tabValidation[$i]->anneeValidation;
+		if($date != $annee){
+			$annee = $date;
+			$tab[$k]=array($date);
 			$k++;
 		}
 	}
@@ -95,14 +95,13 @@ if((isset($_POST["etudiant"]) && !empty($_POST["etudiant"]) && $_POST["etudiant"
 	// Remplissage du tableau
 	foreach($tabValidation as $t){
 		if($t != NULL){
-			$date = $t->dateValidation;
-			$dateDecoup = substr($date,0,4);
+			$date = $t->anneeValidation;
 			$epreuve = $t->idEpreuve;
 			$val = $t->valeurValidation;
 
 			$continu = 1;
 			for($i=2;$i<count($tab) && $continu==1;$i++){
-				if($tab[$i][0] == $dateDecoup)
+				if($tab[$i][0] == $date)
 					$continu = 0;
 			}
 
@@ -119,7 +118,7 @@ if((isset($_POST["etudiant"]) && !empty($_POST["etudiant"]) && $_POST["etudiant"
 				$tab[$i-1][$j-1] = "N.V";
 			}
 			else
-				$tab[$i-1][$j-1]=dateUS2Fr($date);
+				$tab[$i-1][$j-1]="Validée";
 		}
 	}
 

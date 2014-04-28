@@ -50,7 +50,8 @@ HTML;
 
 	$k=2;
 	for($i=1;$i<count($tabValidation);$i++){
-		$anneeCoup = substr($tabValidation[$i]->dateValidation,0,4);
+		//$anneeCoup = substr($tabValidation[$i]->dateValidation,0,4);
+		$anneeCoup = $tabValidation[$i]->anneeValidation;
 		if($anneeCoup != $annee){
 			$annee = $anneeCoup;
 			$tab[$k]=array($anneeCoup);
@@ -74,13 +75,12 @@ HTML;
 	foreach($tabValidation as $t){
 		if($t != NULL){
 			$date = $t->dateValidation;
-			$dateDecoup = substr($date,0,4);
 			$epreuve = $t->idEpreuve;
 			$val = $t->valeurValidation;
 
 			$continu = 1;
 			for($i=2;$i<count($tab) && $continu==1;$i++){
-				if($tab[$i][0] == $dateDecoup)
+				if($tab[$i][0] == $date)
 					$continu = 0;
 			}
 
@@ -97,7 +97,7 @@ HTML;
 				$tab[$i-1][$j-1] = "N.V";
 			}
 			else
-				$tab[$i-1][$j-1]=dateUS2Fr($date);
+				$tab[$i-1][$j-1]="Validée";
 		}
 	}
 
