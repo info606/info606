@@ -101,7 +101,7 @@ HTML;
 		}
 	}
 
-	// Ajout de la ligne final sur 3 ans
+	// Ajout de la ligne sur 3 ans
 	$date = date("Y");
 	$nbrLigne = count($tab);
 	$tab[$nbrLigne][0]="Sur 3 ans";
@@ -118,11 +118,15 @@ HTML;
 			$tab[$nbrLigne][$i]="Non validée";
 	}
 
+	// Ajout de la ligne de validation finale
+	$nbrLigne = count($tab);
+	$tab[$nbrLigne][0]="Général";
+
 
 	// Affichage final avec colorisation
 	for($i=1;$i<count($tab);$i++){
 		// S'il s'agit de l'avant dernière ligne, on saute une ligne
-		if($i == count($tab)-1){
+		if($i == count($tab)-2){
 			$html.="<tr><td>";
 			for($j=1;$j<count($tab[0]);$j++)
 				$html.="<td class='active'>";
@@ -131,20 +135,33 @@ HTML;
 
 		$html.="<tr>";
 
-		for($j=0;$j<count($tab[0]);$j++){
-			if($i>1 && $j>0){
-				if(substr($tab[$i][$j],0,1) == "E")
-					$html.="<td class='info'>".$tab[$i][$j];
-				else if(substr($tab[$i][$j],0,1) == "N")
-					$html.="<td class='danger'>".$tab[$i][$j];
-				else
-					$html.="<td class='success'>".$tab[$i][$j];
+		if($i != count($tab)-1){
+			for($j=0;$j<count($tab[0]);$j++){
+				if($i>1 && $j>0){
+					if(substr($tab[$i][$j],0,1) == "E")
+						$html.="<td class='info'>".$tab[$i][$j];
+					else if(substr($tab[$i][$j],0,1) == "N")
+						$html.="<td class='danger'>".$tab[$i][$j];
+					else
+						$html.="<td class='success'>".$tab[$i][$j];
+				}
+				else{
+						$html.="<td>".$tab[$i][$j];
+				}
+			}
+		}
+		else{
+			$html.="<td>".$tab[$i][0];
+			$nbrEp = count($tab[0])-1;
+			if($_SESSION["C2IValide"] == 1){
+				$html.="<td class='success' colspan='".$nbrEp."'><strong>C2i-1 validé</strong>";
 			}
 			else{
-					$html.="<td>".$tab[$i][$j];
+				$html.="<td class='danger' colspan='".$nbrEp."'><strong>C2i-1 non validé</strong>";
 			}
 		}
 			
+		$html.="</tr>";
 	}
 
 
@@ -152,18 +169,17 @@ HTML;
 
 					</table>
 					<br>
-					
-					<dl class="dl-horizontal"><strong>Légende :</strong>
+					<strong>Légende :</strong>
+					<dl class="dl-horizontal">
 						<dt>N.V</dt>
 					  	<dd>Non Validé (épreuve passée mais échouée).</dd>
 					  	<dt>E.C</dt>
 					  	<dd>En Cours pour l'année universitaire.</dd>
-					  	<dt>Date</dt>
-					  	<dd>Validée</dd>
 					</dl>
 
-					<strong>Information :</strong><br>
-					<p>Une épreuve est validée pour une durée de 3 ans. Au bout de ces 3 ans, la validation n'est plus prise en compte.
+					<strong>Informations :</strong><br>
+					<p>Une épreuve est validée pour une durée de 3 ans. Au bout de ces 3 ans, la validation n'est plus prise en compte.<br>
+					Le c2i-1 peut être validé dans certains cas même si l'étudiant n'a pas validé toutes les épreuves.</p>
 					<br><br>
 				</div>
 
