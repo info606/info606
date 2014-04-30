@@ -155,7 +155,7 @@ HTML;
 
 			$html.="<h4 class='h4'>Suppression réussie.</h4>";
 		}
-		else if($_GET["type"]==1 && $_GET["action"] == 3){
+		else if($_GET["type"]==1 && $_GET["action"] == 4){
 			// Réinitialisation du mot de passe
 			$etudiantControleur = new EtudiantControleur();
 			$etudiant = $etudiantControleur->etudiantManager->recupererParNum($_GET["etudiant"]);
@@ -496,7 +496,7 @@ HTML;
 
 			foreach($tabEtudiant as $e){
 				if($e != null){
-					$html.="<tr><td>".$e->numEtudiant."<td>".$e->nomEtudiant."<td>".$e->prenomEtudiant."<td><a href='gestionbase.php?type=1&action=1&etudiant=".$e->numEtudiant."'><button type='button' class='btn btn-info'>Editer</button></a><a href='gestionbase.php?type=1&action=2&etudiant=".$e->numEtudiant."'><button type='button' class='btn btn-danger'>Supprimer</button></a><a href='gestionbase.php?type=1&action=3&etudiant=".$e->numEtudiant."'><button type='button' class='btn btn-warning'>Réinitialiser MDP</button></a>";
+					$html.="<tr><td>".$e->numEtudiant."<td>".$e->nomEtudiant."<td>".$e->prenomEtudiant."<td><a href='gestionbase.php?type=1&action=1&etudiant=".$e->numEtudiant."'><button type='button' class='btn btn-info'>Editer</button></a><a href='gestionbase.php?type=1&action=2&etudiant=".$e->numEtudiant."'><button type='button' class='btn btn-danger'>Supprimer</button></a><a href='gestionbase.php?type=1&action=4&etudiant=".$e->numEtudiant."'><button type='button' class='btn btn-warning'>Réinitialiser MDP</button></a>";
 				}
 			}
 

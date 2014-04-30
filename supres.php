@@ -24,15 +24,18 @@ $html = <<<HTML
 HTML;
 
 $html.= <<<HTML
+		<br>
 		<div id="bandeau" class="row">
 			<img class="col-md-4 col-md-offset-4" src="images/logo_c2i1.png" alt="c2i-1">	
 		</div>
+		<br><br>
 		<div id="contenu">
 			<br>
 			<div class="row">
 				$menu
 				<div id="page" class="col-md-7 col-md-offset-1">
 					<h2 class="h2">Supprimer des fichiers d'inscription</h2>
+					<br>
 HTML;
 if(count($_SESSION['erreurs']) > 0)
 {
@@ -71,9 +74,13 @@ if($_SESSION["admin"])
 HTML;
 }
 $html .= <<<HTML
+					</table>
 				</div>
+
 			</div>
+<br><br>
 		</div>
+
 HTML;
 
 $html.=<<<HTML

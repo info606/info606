@@ -32,10 +32,8 @@ if(verifConnexion("enseignant")){
 			header('Location: gestionbase.php');
 		}
 		else if($_POST["action"] == "creaEtudiant"){
-			//echo $_POST["numEtudiant"]." - ".$_POST["nomEtudiant"]." - ".$_POST["prenomEtudiant"]." - ".$_POST["mailEtudiant"]." - ".dateFR2US($_POST["naisEtudiant"])." - ".$_POST["loginEtudiant"]." - ".$_POST["naisEtudiant"]." - ".dateFR2US($_POST["dateIAEEtudiant"])." - ".dateFR2US($_POST["dateIAC2IEtudiant"])." - ".$_POST["regimeEtudiant"]." - ".$_POST["etapeEtudiant"];
 			$etudiantControleur = new EtudiantControleur();
 			$e = new Etudiant($_POST["numEtudiant"],$_POST["nomEtudiant"],$_POST["prenomEtudiant"],$_POST["mailEtudiant"],dateFR2US($_POST["naisEtudiant"]),$_POST["loginEtudiant"],sha1($_POST["naisEtudiant"]),dateFR2US($_POST["dateIAEEtudiant"]),dateFR2US($_POST["dateIAC2IEtudiant"]),$_POST["regimeEtudiant"],$_POST["etapeEtudiant"]);
-			//print_r($e);
 			$etudiantControleur->etudiantManager->ajouter($e);
 
 			header('Location: gestionbase.php');
