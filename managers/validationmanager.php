@@ -302,6 +302,8 @@ SQL
 			TRUNCATE table Validation
 SQL
 		);
+
+		$q->execute();
 	}
 
 
