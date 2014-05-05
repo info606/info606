@@ -202,7 +202,7 @@ SQL
 			SELECT count(*) AS "nb"
 			FROM Validation
 			WHERE numEtudiant=:id
-			ORDER BY dateValidation
+			ORDER BY anneeValidation
 SQL
 		);
 
@@ -217,7 +217,7 @@ SQL
 			SELECT *
 			FROM Validation
 			WHERE numEtudiant=:id
-			ORDER BY DATE_FORMAT(Validation.dateValidation,'%Y-%m-%d') ASC
+			ORDER BY anneeValidation ASC
 SQL
 		);
 
