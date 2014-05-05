@@ -1,0 +1,32 @@
+---------------------------------------------------------------
+Installation et paramétrage du serveur de gestion de c2i-1:
+
+---------------------------------------------
+
+Requis:
+	- Serveur web contenant:
+		- PHP 5.5
+		- PhpMyAdmin 4.1
+		- MySql 5.6
+	- Fichiers sources du site web
+	- Script de base de données SQL.
+---------------------------------------------
+
+Installation:
+- Copier tous les fichiers dans le répertoire web du serveur.
+- Connectez vous à votre serveur PhpMyadmin
+- Importez le script de base de données (/bdd/votre_fichier.sql).
+---------------------------------------------
+
+Paramétrage:
+- Editez le fichier /controleur/controleur.php
+- Modifier la ligne contenant les paramètres de connexion à la base de données, mettez votre adresse et vos identifiants de connexion à PhpMyAdmin.
+
+--------------------------------------------------------------
+
+Site crée par:
+Valentin COUTURIER
+Guillaume PIERRON
+
+Etudiants en 3ème année de Licence Informatique à l'Université de Reims Champagne-Ardenne.
+Année Universitaire 2013-2014
