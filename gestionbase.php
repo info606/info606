@@ -46,7 +46,7 @@ if(isset($_GET['type']) && !empty($_GET['type'])){
 			$dateiae = dateUS2FR($e->dateIAEEtudiant);
 			$datec2i = dateUS2FR($e->dateIAC2IEtudiant);
 
-$html.=<<<HTML
+			$html.=<<<HTML
 <form action="modifbase.php" method="POST" class="form-horizontal" role="form" onSubmit="this.mdpEtudiant=CryptoJS.SHA1(this.mdpEtudiant)">
 	<input type="hidden" name="action" value="modifEtudiant">
 	<input type="hidden" name="numEtudiant" value="{$e->numEtudiant}">
@@ -104,17 +104,17 @@ $html.=<<<HTML
 			<select name="regimeEtudiant" class="form-control">
 HTML;
 
-foreach($tabRegime as $t){
-	if($t != null){
-		if($t->numRegime == $e->numRegime)
-			$html.="<option value='".$t->numRegime."' selected>".$t->libRegime."</option>\n";
-		else
-			$html.="<option value='".$t->numRegime."'>".$t->libRegime."</option>\n";
-	}
-	
-}
+			foreach($tabRegime as $t){
+				if($t != null){
+					if($t->numRegime == $e->numRegime)
+						$html.="<option value='".$t->numRegime."' selected>".$t->libRegime."</option>\n";
+					else
+						$html.="<option value='".$t->numRegime."'>".$t->libRegime."</option>\n";
+				}
+				
+			}
 
-$html.=<<<HTML
+			$html.=<<<HTML
 			</select>
 		</div>
 	</div>
@@ -124,15 +124,15 @@ $html.=<<<HTML
 			<select name="etapeEtudiant" class="form-control">
 HTML;
 
-foreach($tabEtape as $t){
-	if($t != null){
-		if($t->idEtape == $e->idEtape)
-			$html.="<option value='".$t->idEtape."' selected>".$t->libLongEtape."</option>\n";
-		else
-			$html.="<option value='".$t->idEtape."'>".$t->libLongEtape."</option>\n";
-	}
-	
-}
+			foreach($tabEtape as $t){
+				if($t != null){
+					if($t->idEtape == $e->idEtape)
+						$html.="<option value='".$t->idEtape."' selected>".$t->libLongEtape."</option>\n";
+					else
+						$html.="<option value='".$t->idEtape."'>".$t->libLongEtape."</option>\n";
+				}
+				
+			}
 
 $html.=<<<HTML
 			</select>
@@ -201,20 +201,21 @@ HTML;
 		<div class="col-sm-4">
 			<select name="compEnseignant" class="form-control" id="inputcomposante3">
 HTML;
-		$composanteControleur = new ComposanteControleur();
-		$composantes = $composanteControleur->composanteManager->recupererTout();
-		foreach ($composantes as $c) {
-			if($_SESSION['numComposante'] != $c->numComposante)
-			{
-				$html.="<option value='{$c->numComposante}'>$c->libComposante</option>";	
+			$composanteControleur = new ComposanteControleur();
+			$composantes = $composanteControleur->composanteManager->recupererTout();
+			foreach ($composantes as $c) {
+				if($_SESSION['numComposante'] != $c->numComposante)
+				{
+					$html.="<option value='{$c->numComposante}'>$c->libComposante</option>";	
+				}
+				else
+				{
+					$html.="<option selected value='{$c->numComposante}'>$c->libComposante</option>";
+				}
+				
 			}
-			else
-			{
-				$html.="<option selected value='{$c->numComposante}'>$c->libComposante</option>";
-			}
-			
-		}
-$html.=<<<HTML
+
+			$html.=<<<HTML
 			</select>
 		</div>
 	</div>
@@ -233,57 +234,6 @@ HTML;
 
 			$html.="<h4 class='h4'>Suppression réussie.</h4>";			
 		}
-		else if($_GET["type"]==3 && $_GET["action"] == 1){
-			$epreuveControleur = new EpreuveControleur();
-			$e = $epreuveControleur->epreuveManager->recupererParNum($_GET["epreuve"]);
-			$composanteControleur = new ComposanteControleur();
-			$tabComposante = $composanteControleur->composanteManager->recupererTout();
-
-			$html.=<<<HTML
-<form action="modifbase.php" method="POST" class="form-horizontal" role="form">
-	<input type="hidden" name="action" value="modifEpreuve">
-	<input type="hidden" name="numEpreuve" value="{$e->idEpreuve}">
-	<div class="form-group">
-		<label class="col-sm-3 control-label">Libellé</label>
-		<div class="col-sm-4">
-			<input name="libEpreuve" type="text" class="form-control" id="inputEmail3" placeholder="Libellé de l'épreuve" value="{$e->libEpreuve}">
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-3 control-label">Composante</label>
-		<div class="col-sm-4">
-			<select name="composanteEpreuve" class="form-control">
-HTML;
-
-foreach($tabComposante as $t){
-	if($t != null){
-		if($t->numComposante == $e->numComposante)
-			$html.="<option value='".$t->numComposante."' selected>".$t->libComposante."</option>\n";
-		else
-			$html.="<option value='".$t->numComposante."'>".$t->libComposante."</option>\n";
-	}
-	
-}
-
-$html.=<<<HTML
-			</select>
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-sm-offset-3 col-sm-4">
-			<button type="submit" class="btn btn-default">Valider les modifications</button>
-		</div>
-	</div>
-</form>
-HTML;
-		}
-		else if($_GET["type"]==3 && $_GET["action"] == 2){
-			$epreuve = new Epreuve($_GET["epreuve"]);
-			$epreuveControleur = new EpreuveControleur();
-			$epreuveControleur->epreuveManager->supprimer($epreuve);
-
-			$html.="<h4 class='h4'>Suppression réussie.</h4>";	
-		}
 		else if($_GET["type"]==1 && $_GET["action"] == 3){
 			/* Création d'un étudiant*/
 			$regimeControleur = new RegimeControleur();
@@ -291,7 +241,7 @@ HTML;
 			$etapeControleur = new EtapeControleur();
 			$tabEtape = $etapeControleur->etapeManager->recupererTout();
 
-$html.=<<<HTML
+			$html.=<<<HTML
 <form action="modifbase.php" method="POST" class="form-horizontal" role="form">
 	<input type="hidden" name="action" value="creaEtudiant">
 	<div class="form-group">
@@ -348,14 +298,14 @@ $html.=<<<HTML
 			<select name="regimeEtudiant" class="form-control">
 HTML;
 
-foreach($tabRegime as $t){
-	if($t != null){
-		$html.="<option value='".$t->numRegime."'>".$t->libRegime."</option>\n";
-	}
-	
-}
+			foreach($tabRegime as $t){
+				if($t != null){
+					$html.="<option value='".$t->numRegime."'>".$t->libRegime."</option>\n";
+				}
+				
+			}
 
-$html.=<<<HTML
+			$html.=<<<HTML
 			</select>
 		</div>
 	</div>
@@ -365,14 +315,14 @@ $html.=<<<HTML
 			<select name="etapeEtudiant" class="form-control">
 HTML;
 
-foreach($tabEtape as $te){
-	if($te != null){
-		$html.="<option value='".$te->idEtape."'>".$te->libLongEtape."</option>\n";
-	}
-	
-}
+			foreach($tabEtape as $te){
+				if($te != null){
+					$html.="<option value='".$te->idEtape."'>".$te->libLongEtape."</option>\n";
+				}
+				
+			}
 
-$html.=<<<HTML
+			$html.=<<<HTML
 			</select>
 		</div>
 	</div>
@@ -419,21 +369,22 @@ HTML;
 		<div class="col-sm-4">
 			<select name="compEnseignant" class="form-control" id="inputcomposante3">
 HTML;
-		$composanteControleur = new ComposanteControleur();
-		$composantes = $composanteControleur->composanteManager->recupererTout();
+			$composanteControleur = new ComposanteControleur();
+			$composantes = $composanteControleur->composanteManager->recupererTout();
 
-		foreach ($composantes as $c) {
-			if($_SESSION['numComposante'] != $c->numComposante)
-			{
-				$html.="<option value='{$c->numComposante}'>$c->libComposante</option>";	
+			foreach ($composantes as $c) {
+				if($_SESSION['numComposante'] != $c->numComposante)
+				{
+					$html.="<option value='{$c->numComposante}'>$c->libComposante</option>";	
+				}
+				else
+				{
+					$html.="<option selected value='{$c->numComposante}'>$c->libComposante</option>";
+				}
+				
 			}
-			else
-			{
-				$html.="<option selected value='{$c->numComposante}'>$c->libComposante</option>";
-			}
-			
-		}
-$html.=<<<HTML
+
+			$html.=<<<HTML
 			</select>
 		</div>
 	</div>
@@ -445,47 +396,6 @@ $html.=<<<HTML
 </form>
 HTML;
 		}
-		else if($_GET["type"]==3 && $_GET["action"] == 3){
-			/* Création d'une épreuve */
-			$composanteControleur = new ComposanteControleur();
-			$tabComposante = $composanteControleur->composanteManager->recupererTout();
-
-			$html.=<<<HTML
-<form action="modifbase.php" method="POST" class="form-horizontal" role="form">
-	<input type="hidden" name="action" value="creaEpreuve">
-	<div class="form-group">
-		<label class="col-sm-3 control-label">Libellé</label>
-		<div class="col-sm-4">
-			<input name="libEpreuve" type="text" class="form-control" id="inputEmail3" placeholder="Libellé de l'épreuve">
-		</div>
-	</div>
-	<div class="form-group">
-		<label class="col-sm-3 control-label">Composante</label>
-		<div class="col-sm-4">
-			<select name="composanteEpreuve" class="form-control">
-HTML;
-
-foreach($tabComposante as $t){
-	if($t != null){
-		$html.="<option value='".$t->numComposante."'>".$t->libComposante."</option>\n";
-	}
-	
-}
-
-$html.=<<<HTML
-			</select>
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-sm-offset-3 col-sm-4">
-			<button type="submit" class="btn btn-default">Créer l'épreuve</button>
-		</div>
-	</div>
-</form>
-HTML;
-		}
-		else
-			$html.="<h4 class='h4'>Une erreur est survenue.</h4>";
 	}
 	else{
 		if($_GET["type"]==1){
@@ -521,41 +431,18 @@ HTML;
 			$html.="</table>\n";
 
 		}
-		else if($_GET["type"]==3){
-			$epreuveControleur = new EpreuveControleur();
-			$tabEpreuve = $epreuveControleur->epreuveManager->recupererTout();
-			$composanteControleur = new ComposanteControleur();
-			$tabComposante = $composanteControleur->composanteManager->recupererTout();
-			$html.="<h3 class='h3'>Gestion des épreuves</h3><br>";
-			$html.= "<table id='tableaugestionbase' class='table table-bordered'><tr><td>Numéro<td>Libellé<td>Composante<td>Actions\n";
-
-			foreach($tabEpreuve as $t){
-				if($t != null){
-					for($i=0;$i<count($tabComposante);$i++){
-						if($tabComposante[$i]!= null && ($t->numComposante == $tabComposante[$i]->numComposante)){
-							$html.="<tr><td>".$t->idEpreuve."<td>".$t->libEpreuve."<td>".$tabComposante[$i]->libComposante."<td><a href='gestionbase.php?type=3&action=1&epreuve=".$t->idEpreuve."'><button type='button' class='btn btn-info'>Editer</button></a><a href='gestionbase.php?type=3&action=2&epreuve=".$t->idEpreuve."'><button type='button' class='btn btn-danger'>Supprimer</button></a>";
-						}
-					}
-				}
-			}
-
-			$html.="<tr><td><td><td><td><a href='gestionbase.php?type=3&action=3'><button type='button' class='btn btn-success'>Créer une épreuve</button></a>";
-
-			$html.="</table>\n";
-		}
 		else
 			$html.="<h4 class='h4'>Une erreur est survenue.</h4>";
 	}
 }
-else{
-$html.=<<<HTML
+	else{
+		$html.=<<<HTML
 					<h3 class='h3'>Quelle donnée souhaitez-vous gérer?</h3>
 					<br>
 					<a href="gestionbase.php?type=1">Etudiants</a><br>
-					<a href="gestionbase.php?type=2">Enseignants</a><br>
-					<a href="gestionbase.php?type=3">Epreuve</a><br><br><br>
+					<a href="gestionbase.php?type=2">Enseignants</a><br><br><br>
 HTML;
-	}
+}
 
 $html.=<<<HTML
 				</div>
